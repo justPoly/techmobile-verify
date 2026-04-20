@@ -5,6 +5,16 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(),        // ← This is the new official way
+    tailwindcss()
   ],
+
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost/backend',     // Points to XAMPP (port 80)
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  }
 })

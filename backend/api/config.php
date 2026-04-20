@@ -3,18 +3,22 @@
 $host = 'localhost';
 $dbname = 'techmobile_db';
 $username = 'root';
-$password = '';          // Leave empty if you didn't set password in XAMPP
+$password = '';
 
 // Create connection
 $conn = new mysqli($host, $username, $password, $dbname, 3307);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die(json_encode([
+        'status' => 'error',
+        'verdict' => 'error',
+        'message' => 'Database connection failed'
+    ]));
 }
 
-// Set charset to utf8
+// Set charset
 $conn->set_charset("utf8mb4");
 
-echo "Database Connected Successfully!";   // You can remove this line later
+// DO NOT echo anything here in production
 ?>
