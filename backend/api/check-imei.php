@@ -8,48 +8,38 @@ require_once 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
-    $input = trim($data['input'] ?? '');   // We'll use one field for both IMEI and model
+    $modelInput = trim($data['input'] ?? '');
 
-    if (empty($input)) {
-        echo json_encode(['status' => 'error', 'verdict' => 'error', 'message' => 'Input is required']);
+    if (empty($modelInput)) {
+        echo json_encode([
+            'status' => 'error', 
+            'verdict' => 'error', 
+            'message' => 'Please enter a phone model name'
+        ]);
         exit;
     }
 
-    // If it's a 15-digit IMEI
-    if (strlen($input) === 15 && is_numeric($input)) {
-        $tac = substr($input, 0, 8);
-        $search = "%{$tac}%";
-        
-        $sql = "SELECT * FROM ncc_approved 
-                WHERE models LIKE ? 
-                   OR manufacturer LIKE ? 
-                ORDER BY id DESC LIMIT 1";
-                
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $search, $search);
-    } 
-    // Else treat as model name search
-    else {
-        $search = "%{$input}%";
-        $sql = "SELECT * FROM ncc_approved 
-                WHERE models LIKE ? 
-                   OR manufacturer LIKE ? 
-                   OR equipment_name LIKE ?
-                ORDER BY id DESC LIMIT 1";
-                
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $search, $search, $search);
-    }
+    $search = "%{$modelInput}%";
 
+    // Search in relevant columns
+    $sql = "SELECT * FROM ncc_approved 
+            WHERE models LIKE ? 
+               OR manufacturer LIKE ? 
+               OR equipment_name LIKE ?
+            ORDER BY id DESC LIMIT 1";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sss", $search, $search, $search);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
+        
         echo json_encode([
             'status' => 'success',
             'verdict' => 'genuine',
-            'message' => 'This device is NCC Approved ✅',
+            'message' => 'This model is NCC Approved ✅',
             'brand' => $row['manufacturer'],
             'model' => $row['models'],
             'equipment_name' => $row['equipment_name'],
@@ -59,10 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode([
             'status' => 'warning',
             'verdict' => 'suspicious',
-            'message' => 'This phone/model was NOT found in the NCC Approved list. Please be careful — it might be grey import or fake.'
+            'message' => 'This model was NOT found in the NCC Approved list. It might be a new release, grey import, or fake. Be careful!'
         ]);
     }
 } else {
-    echo json_encode(['status' => 'error', 'verdict' => 'error', 'message' => 'Invalid request method']);
+    echo json_encode([
+        'status' => 'error', 
+        'verdict' => 'error', 
+        'message' => 'Invalid request method'
+    ]);
 }
 ?>
