@@ -15,11 +15,11 @@ $imei = trim($_POST['imei'] ?? '');
 $model_name = trim($_POST['model_name'] ?? '');
 $brand = trim($_POST['brand'] ?? '');
 $verdict = $_POST['verdict'] ?? '';
-$comment = trim($_POST['comment'] ?? '');
+$used_duration = trim($_POST['used_duration'] ?? '');
 $buyer_location = trim($_POST['buyer_location'] ?? '');
-$used_months = intval($_POST['used_months'] ?? 0);
+$comment = trim($_POST['comment'] ?? '');
 
-// Basic validation
+// Validation
 if (strlen($imei) !== 15 || empty($model_name) || empty($verdict)) {
     echo json_encode(['status' => 'error', 'message' => 'IMEI, Model and Verdict are required']);
     exit;
@@ -30,7 +30,7 @@ $stmt = $conn->prepare("SELECT id FROM community_reports WHERE imei = ?");
 $stmt->bind_param("s", $imei);
 $stmt->execute();
 if ($stmt->get_result()->num_rows > 0) {
-    echo json_encode(['status' => 'error', 'message' => 'This IMEI has already been reported']);
+    echo json_encode(['status' => 'error', 'message' => 'This phone has already been reported']);
     exit;
 }
 
@@ -38,8 +38,7 @@ if ($stmt->get_result()->num_rows > 0) {
 $uploadDir = '../uploads/reports/';
 if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
-$photo1 = '';
-$photo2 = '';
+$photo1 = $photo2 = '';
 
 if (isset($_FILES['photo1']) && $_FILES['photo1']['error'] == 0) {
     $photo1 = time() . '_1_' . basename($_FILES['photo1']['name']);
@@ -52,23 +51,20 @@ if (isset($_FILES['photo2']) && $_FILES['photo2']['error'] == 0) {
 }
 
 if (empty($photo1) || empty($photo2)) {
-    echo json_encode(['status' => 'error', 'message' => 'Please upload at least 2 photos']);
+    echo json_encode(['status' => 'error', 'message' => 'Please upload 2 photos as proof']);
     exit;
 }
 
-// Insert Report (Auto Approved)
-$sql = "INSERT INTO community_reports (imei, model_name, brand, verdict, comment, buyer_location, photo1, photo2, used_months) 
+// Save Report (Auto Approved)
+$sql = "INSERT INTO community_reports (imei, model_name, brand, verdict, used_duration, buyer_location, comment, photo1, photo2) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssssssi", $imei, $model_name, $brand, $verdict, $comment, $buyer_location, $photo1, $photo2, $used_months);
+$stmt->bind_param("sssssssss", $imei, $model_name, $brand, $verdict, $used_duration, $buyer_location, $comment, $photo1, $photo2);
 
 if ($stmt->execute()) {
-    echo json_encode([
-        'status' => 'success',
-        'message' => 'Thank you! Your report has been published successfully.'
-    ]);
+    echo json_encode(['status' => 'success', 'message' => 'Thank you! Your report has been published.']);
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Failed to submit report']);
+    echo json_encode(['status' => 'error', 'message' => 'Failed to save report']);
 }
 ?>
