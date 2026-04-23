@@ -1,9 +1,20 @@
 import { useState } from "react";
+import heroImg from "../assets/hero-section-img-main-.png";
 
 // Icons as inline SVGs
+// Better Shield Icon with Checkmark
 const ShieldIcon = ({ className = "" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg 
+    className={className} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2.5"
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <path d="M9 12l2 2 4-4" />   {/* Checkmark inside the shield */}
   </svg>
 );
 
@@ -259,58 +270,30 @@ export default function Home() {
         </div>
 
         {/* Right - Phone Image + Badge */}
-        <div className="relative flex justify-center">
-          {/* Phone mockup group */}
-          <div className="relative w-72 h-80">
-            {/* Back phone - purple */}
-            <div className="absolute right-0 top-4 w-40 h-72 bg-gradient-to-b from-purple-700 to-purple-900 rounded-[2rem] shadow-2xl border-4 border-purple-600 overflow-hidden">
-              <div className="w-full h-full bg-gradient-to-br from-purple-500/30 to-transparent" />
-              {/* Camera bump */}
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 w-20 h-20 bg-purple-900 rounded-2xl flex items-center justify-center">
-                <div className="grid grid-cols-2 gap-1.5">
-                  <div className="w-6 h-6 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center">
-                    <div className="w-3 h-3 rounded-full bg-gray-600" />
-                  </div>
-                  <div className="w-6 h-6 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center">
-                    <div className="w-3 h-3 rounded-full bg-gray-600" />
-                  </div>
-                  <div className="w-6 h-6 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center col-span-2 mx-auto">
-                    <div className="w-3 h-3 rounded-full bg-gray-600" />
-                  </div>
-                </div>
-              </div>
-            </div>
+        
+      <div className="relative flex justify-center">
+        <div className="relative">
+          {/* Actual hero image */}
+          <img
+            src={heroImg}
+            alt="NCC Approved Phones"
+            className="hero-image w-full max-w-sm object-contain drop-shadow-2xl"
+          />
 
-            {/* Front phone - light blue/silver */}
-            <div className="absolute left-0 top-8 w-40 h-72 bg-gradient-to-b from-slate-200 to-blue-200 rounded-[2rem] shadow-2xl border-4 border-slate-200 overflow-hidden">
-              <div className="w-full h-full bg-gradient-to-br from-white/50 to-transparent" />
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 w-20 h-20 bg-slate-300 rounded-2xl flex items-center justify-center">
-                <div className="grid grid-cols-2 gap-1.5">
-                  <div className="w-6 h-6 rounded-full bg-gray-400 border border-gray-300 flex items-center justify-center">
-                    <div className="w-3 h-3 rounded-full bg-gray-500" />
-                  </div>
-                  <div className="w-6 h-6 rounded-full bg-gray-400 border border-gray-300 flex items-center justify-center">
-                    <div className="w-3 h-3 rounded-full bg-gray-500" />
-                  </div>
-                  <div className="w-6 h-6 rounded-full bg-gray-400 border border-gray-300 flex items-center justify-center col-span-2 mx-auto">
-                    <div className="w-3 h-3 rounded-full bg-gray-500" />
-                  </div>
-                </div>
-              </div>
+          {/* NCC Approved Badge - Moved slightly below center */}
+          <div className="absolute bottom-28 right-28 bg-white rounded-2xl shadow-xl p-4 flex items-center gap-3 w-80 border border-gray-100">
+            <div className="w-22 h-22 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <ShieldIcon className="w-12 h-12 text-green-600" />
             </div>
-
-            {/* NCC Approved Badge */}
-            <div className="absolute bottom-0 right-0 bg-white rounded-2xl shadow-xl p-3 flex items-center gap-3 w-56 border border-gray-100">
-              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <ShieldIcon className="w-5 h-5 text-green-600" />
-              </div>
-              <div>
-                <p className="text-green-600 font-bold text-sm">NCC Approved</p>
-                <p className="text-gray-500 text-xs leading-snug">This device is approved for use in all networks in Nigeria.</p>
-              </div>
+            <div>
+              <p className="text-green-600 font-bold text-2xl">NCC Approved</p>
+              <p className="text-gray-500 text-xs leading-snug mt-1">
+                This device is approved for use in all networks in Nigeria.
+              </p>
             </div>
           </div>
         </div>
+      </div>
       </section>
 
       {/* FEATURES STRIP */}

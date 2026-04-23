@@ -1,2 +1,24 @@
 @import "tailwindcss";
 
+/* Hero Image - Responsive */
+.hero-image {
+  width: 100%;
+  max-width: 650px;           /* Desktop size */
+  height: auto;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+}
+
+/* Make it smaller on mobile for better layout */
+@media (max-width: 768px) {
+  .hero-image {
+    max-width: 420px;         /* Good size for tablets & large phones */
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-image {
+    max-width: 340px;         /* Good for small mobile phones */
+  }
+}
