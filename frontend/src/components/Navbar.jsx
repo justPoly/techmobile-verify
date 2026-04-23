@@ -36,9 +36,13 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
+//  // Shared container: full-width mobile, centred with padding on desktop
+//   const container = "w-full px-4 sm:px-6 lg:px-8 xl:px-12 max-w-screen-xl mx-auto";
+
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="w-full max-w-8xl mx-auto px-4 py-3 flex items-center justify-between">
+        
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <div className="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center">
@@ -77,16 +81,18 @@ export default function Navbar() {
 
         {/* Right side: CTA + Mobile toggle */}
         <div className="flex items-center gap-3">
+          
+          {/* Login / Sign Up - Hidden on mobile */}
           <Link
             to="/login"
-            className="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+            className="hidden md:block bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
           >
             Login / Sign Up
           </Link>
 
-          {/* Hamburger — mobile only */}
+          {/* Hamburger Menu - Only visible on mobile */}
           <button
-            className="md:hidden p-1 text-gray-600 hover:text-green-600 transition-colors"
+            className="md:hidden p-2 text-gray-600 hover:text-green-600 transition-colors"
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-label="Toggle menu"
           >
@@ -99,10 +105,10 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Dropdown */}
+      {/* Mobile Dropdown Menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-gray-100 bg-white px-4 pb-4">
-          <div className="flex flex-col gap-1 pt-3">
+        <div className="md:hidden border-t border-gray-100 bg-white px-4 pb-6">
+          <div className="flex flex-col gap-1 pt-4">
             {navLinks.map(({ label, to }) => {
               const isActive = location.pathname === to;
               return (
@@ -110,7 +116,7 @@ export default function Navbar() {
                   key={to}
                   to={to}
                   onClick={() => setMobileOpen(false)}
-                  className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                  className={`px-4 py-3 rounded-xl text-base transition-colors ${
                     isActive
                       ? "bg-green-50 text-green-600 font-semibold"
                       : "text-gray-600 hover:bg-gray-50 hover:text-green-600"
@@ -120,10 +126,12 @@ export default function Navbar() {
                 </Link>
               );
             })}
+
+            {/* Login/Sign Up inside mobile menu */}
             <Link
               to="/login"
               onClick={() => setMobileOpen(false)}
-              className="mt-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-2 rounded-lg text-center transition-colors"
+              className="mt-4 bg-green-600 hover:bg-green-700 text-white text-base font-semibold py-3 rounded-xl text-center transition-colors"
             >
               Login / Sign Up
             </Link>
