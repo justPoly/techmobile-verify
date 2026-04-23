@@ -22,29 +22,27 @@ export default function Result() {
   const [photos, setPhotos] = useState({ photo1: null, photo2: null });
 
   useEffect(() => {
-    // ==================== DUMMY DATA FOR TESTING ====================
-    // Remove this block after testing
-    const dummyData = {
-      verdict: 'genuine',
-      message: 'This model is NCC Approved and safe to buy in Nigeria.',
-      brand: 'Tecno',
-      model: 'Camon 30 Premier',
-      applicant: 'TRANSSION HOLDINGS'
-    };
-    setResult(dummyData);
-    // ==================== END OF DUMMY DATA ====================
-
-    // Real data from navigation (uncomment when ready)
-    // if (location.state) {
-    //   setResult(location.state);
-    // } else {
-    //   navigate('/');
-    // }
+    if (location.state) {
+      setResult(location.state);
+      fetchReports(location.state.model || location.state.equipment_name);
+    } else {
+      navigate('/');
+    }
   }, [location, navigate]);
 
-  if (!result) return <p className="text-center py-20">Loading...</p>;
-
-  const isApproved = result.verdict === 'genuine';
+  const fetchReports = async (modelName) => {
+    if (!modelName) return;
+    setLoadingReports(true);
+    try {
+      const res = await axios.get(`/api/get-reports.php?model=${encodeURIComponent(modelName)}`);
+      setReports(res.data);
+    } catch (error) {
+      console.error("Failed to load reports");
+      setReports([]);
+    } finally {
+      setLoadingReports(false);
+    }
+  };
 
   const handleSubmitReport = async () => {
     if (!reportForm.imei || reportForm.imei.length !== 15) {
@@ -74,12 +72,17 @@ export default function Result() {
       setShowReportModal(false);
       setReportForm({ imei: '', verdict: '', used_duration: '', buyer_location: '', comment: '' });
       setPhotos({ photo1: null, photo2: null });
+      fetchReports(result.model || result.equipment_name); // Refresh reports
     } catch (error) {
       alert("Failed to submit report. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (!result) return <p className="text-center py-20">Loading...</p>;
+
+  const isApproved = result.verdict === 'genuine';
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -134,11 +137,31 @@ export default function Result() {
 
           {/* Community Reports Section */}
           <div className="border-t pt-10">
-            <h3 className="text-2xl font-bold mb-6">Community Reports</h3>
-            <p className="text-gray-500 text-center py-8">No reports yet. Be the first to submit one!</p>
+            <h3 className="text-2xl font-bold mb-6">Community Reports ({reports.length})</h3>
+
+            {loadingReports ? (
+              <p className="text-center py-8">Loading reports...</p>
+            ) : reports.length > 0 ? (
+              <div className="space-y-6">
+                {reports.slice(0, 5).map((report, index) => (
+                  <div key={index} className="bg-gray-50 p-6 rounded-2xl">
+                    <div className="flex justify-between items-start">
+                      <span className={`font-semibold ${report.verdict === 'genuine' ? 'text-green-600' : 'text-red-600'}`}>
+                        {report.verdict === 'genuine' ? '✅ Genuine' : report.verdict === 'fake' ? '❌ Fake' : '🔄 Refurbished'}
+                      </span>
+                      <span className="text-sm text-gray-500">{report.used_duration}</span>
+                    </div>
+                    {report.comment && <p className="mt-3 text-gray-700">{report.comment}</p>}
+                    <p className="text-xs text-gray-500 mt-3">Bought from: {report.buyer_location}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 text-center py-8">No reports yet. Be the first to submit one!</p>
+            )}
           </div>
 
-          {/* Buttons */}
+          {/* Action Buttons */}
           <div className="flex flex-col gap-3 mt-12 max-w-md mx-auto">
             <button
               onClick={() => setShowReportModal(true)}

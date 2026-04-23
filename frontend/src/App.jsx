@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Verify from './pages/Verify';
+import Home from './pages/Home';
 import Result from './pages/Results';
 
 function App() {
@@ -8,7 +9,7 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Verify />} />
+        <Route path="/" element={<Home />} />
         <Route path="/result" element={<Result />} />
       </Routes>
     </Router>
