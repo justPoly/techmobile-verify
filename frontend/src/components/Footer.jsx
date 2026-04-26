@@ -136,9 +136,11 @@ export default function Footer() {
 
           </div>
 
-          <div className="pt-5 text-center">
-            <p className="text-xs text-gray-500">© 2026 Techmobile NG. All rights reserved.</p>
-          </div>
+        <div className="pt-5 text-center">
+          <p className="text-xs text-gray-500">
+            © {new Date().getFullYear()} Techmobile NG. All rights reserved.
+          </p>
+        </div>
         </div>
       </footer>
     )
