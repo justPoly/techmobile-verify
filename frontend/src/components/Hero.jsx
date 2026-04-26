@@ -40,13 +40,13 @@ export default function Hero() {
                 {/* Left */}
                 <div className="order-2 md:order-1">
                     <h1 className="text-3xl sm:text-4xl lg:text-5xl text-gray-900 leading-tight mb-4">
-                    Check if a Phone {" "}<br/>
-                    is <span className="text-green-600">NCC&nbsp;Approved</span>{" "}<br/>
+                    Check if Any Phone {" "}<br/>
+                    is <span className="text-green-600">Safe to Buy</span>{" "}<br/>
                     in Nigeria
                     </h1>
                     <p className="text-gray-500 text-base mb-8">
-                    Search any phone model to verify if it is approved by the Nigerian
-                    Communications Commission (NCC)
+                    Avoid fake, cloned, or unverified phones in seconds. 
+                    Search any device to see if it's approved, trusted, and safe to use.
                     </p>
 
                     {/* Search Bar */}
@@ -94,9 +94,9 @@ export default function Hero() {
                         <ShieldIcon className="w-6 h-6 text-green-600" />
                         </div>
                         <div>
-                        <p className="text-green-600 font-bold text-sm sm:text-base">NCC Approved</p>
+                        <p className="text-green-600 font-bold text-sm sm:text-base">Check Phone Now</p>
                         <p className="text-gray-500 text-[11px] leading-snug mt-0.5">
-                            This device is approved for use in all networks in Nigeria.
+                            Powered by regulatory data + community insights
                         </p>
                         </div>
                     </div>

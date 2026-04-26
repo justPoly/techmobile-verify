@@ -128,8 +128,8 @@ export default function Footer() {
             <div>
               <h3 className="text-white font-semibold text-sm mb-3">Disclaimer</h3>
               <p className="text-xs text-gray-400 leading-relaxed">
-                Techmobile NG is not affiliated with the NCC. Data is sourced from the public NCC
-                database and community reports. Use at your own discretion.
+                Techmobile NG is not affiliated with the NCC. Data is sourced from the publicly available 
+                records and community reports. Use at your own discretion.
               </p>
             </div>
 

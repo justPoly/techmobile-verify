@@ -90,7 +90,7 @@ export default function Home() {
     {
       icon: <SearchIcon className="w-6 h-6 text-green-600" />,
       title: "Instant Verification",
-      desc: "Get real-time results from the official NCC database",
+      desc: "Get real-time results from trusted data sources",
     },
     {
       icon: <ShieldIcon className="w-6 h-6 text-green-600" />,
@@ -105,7 +105,7 @@ export default function Home() {
     {
       icon: <LockIcon className="w-6 h-6 text-green-600" />,
       title: "100% Free",
-      desc: "Our service is free and will always remain free",
+      desc: "Our service is free, no hidden charges",
     },
   ];
 
@@ -127,7 +127,7 @@ export default function Home() {
     {
       num: 2,
       title: "Verify",
-      desc: "We check the NCC approval database.",
+      desc: "We check regulatory data",
       icon: (
         <svg viewBox="0 0 40 40" fill="none" className="w-9 h-9">
           <path d="M20 4l-14 5v9c0 8 6 15 14 18 8-3 14-10 14-18V9L20 4z"
@@ -140,7 +140,7 @@ export default function Home() {
     {
       num: 3,
       title: "Get Result",
-      desc: "View the approval status instantly.",
+      desc: "See if the phone is safe, unverified, or risky.",
       icon: (
         <svg viewBox="0 0 40 40" fill="none" className="w-9 h-9">
           <rect x="8" y="2" width="18" height="28" rx="3" fill="#f0fdf4" stroke="#16a34a" strokeWidth="1.5" />
@@ -152,8 +152,8 @@ export default function Home() {
   ];
 
   const whyMatters = [
-    "Only NCC approved devices are allowed on Nigerian networks.",
-    "Unapproved phones may be blocked or have limited functionality.",
+    "Only approved devices are guaranteed to work properly in Nigeria.",
+    "Unverified phones may be blocked or have limited functionality.",
     "Always check before you buy!",
   ];
 
@@ -255,10 +255,10 @@ export default function Home() {
             <div className="flex items-start sm:items-center gap-4">
               <PhoneQuestionIcon />
               <div>
-                <p className="font-bold text-gray-900 text-base">Can't find a phone model?</p>
+                <p className="font-bold text-gray-900 text-base">Can't find a phone? Help Us Improve</p>
                 <p className="text-gray-500 text-sm mt-0.5">
-                  If the phone you're looking for is not in our database, you can submit a
-                  report to help us update it.
+                  If the phone you're looking for is not listed yet (especially new releases) , you can submit a
+                  report and help others avoid bad purchases.
                 </p>
               </div>
             </div>
