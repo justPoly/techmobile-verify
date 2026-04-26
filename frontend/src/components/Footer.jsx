@@ -67,20 +67,20 @@ export default function Footer() {
             {/* Brand — full width on smallest screens */}
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                   <ShieldIcon className="w-4 h-4 text-white" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1">
-                    <span className="font-bold text-white text-sm">Techmobile NG</span>
-                    <span className="bg-green-600 text-white text-[8px] font-bold px-1 py-0.5 rounded">NG</span>
+                    <span className="font-bold text-white text-sm">Techmobile</span>
+                    <span className="bg-blue-600 text-white text-[8px] font-bold px-1 py-0.5 rounded">NG</span>
                   </div>
                   <p className="text-[9px] text-gray-500 leading-none">Verify. Trust. Buy Smart.</p>
                 </div>
               </div>
               <p className="text-xs text-gray-400 leading-relaxed">
-                Techmobile NG helps you verify if a phone is NCC approved in Nigeria. Our mission
-                is to promote safe and informed mobile phone purchases.
+                TechMobile NG helps you check if a phone is safe, genuine, and reliable before you buy.
+                Our mission is to help Nigerians avoid fake, cloned, or unverified devices and make smarter purchasing decisions.
               </p>
               <div className="flex gap-3 mt-4">
                 {[
@@ -128,8 +128,9 @@ export default function Footer() {
             <div>
               <h3 className="text-white font-semibold text-sm mb-3">Disclaimer</h3>
               <p className="text-xs text-gray-400 leading-relaxed">
-                Techmobile NG is not affiliated with the NCC. Data is sourced from the publicly available 
-                records and community reports. Use at your own discretion.
+              TechMobile NG is an independent platform built to help users make safer phone 
+              purchases using aggregated data and community insights. 
+              While we strive for accuracy, users are advised to make final purchase decisions carefully.
               </p>
             </div>
 

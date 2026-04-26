@@ -88,22 +88,22 @@ export default function Home() {
 
   const features = [
     {
-      icon: <SearchIcon className="w-6 h-6 text-green-600" />,
+      icon: <SearchIcon className="w-6 h-6 text-blue-600" />,
       title: "Instant Verification",
       desc: "Get real-time results from trusted data sources",
     },
     {
-      icon: <ShieldIcon className="w-6 h-6 text-green-600" />,
+      icon: <ShieldIcon className="w-6 h-6 text-blue-600" />,
       title: "Avoid Fake Phones",
       desc: "Verify before you buy and protect your money",
     },
     {
-      icon: <UsersIcon className="w-6 h-6 text-green-600" />,
+      icon: <UsersIcon className="w-6 h-6 text-blue-600" />,
       title: "Community Reports",
       desc: "Help others by reporting new or unlisted devices",
     },
     {
-      icon: <LockIcon className="w-6 h-6 text-green-600" />,
+      icon: <LockIcon className="w-6 h-6 text-blue-600" />,
       title: "100% Free",
       desc: "Our service is free, no hidden charges",
     },
@@ -205,7 +205,7 @@ export default function Home() {
             <div className="flex items-start gap-1 sm:gap-2">
               {steps.map((step, i) => (
                 <div key={step.num} className="flex items-center flex-1">
-                  <div className="flex-1 bg-gray-50 rounded-2xl p-3 sm:p-4 flex flex-col
+                  <div className="flex-1 bg-blue-50 rounded-2xl p-3 sm:p-4 flex flex-col
                     items-center text-center border border-gray-100">
                     <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-green-100 text-green-600
                       text-xs font-bold flex items-center justify-center mb-2">
@@ -228,13 +228,13 @@ export default function Home() {
           {/* Why It Matters */}
           <div className="bg-green-50 rounded-2xl p-5 sm:p-6 relative overflow-hidden">
             <div className="absolute bottom-0 right-0 opacity-10 pointer-events-none">
-              <ShieldIcon className="w-32 h-32 sm:w-40 sm:h-40 text-green-600" />
+              <ShieldIcon className="w-32 h-32 sm:w-40 sm:h-40 text-blue-600" />
             </div>
             <h2 className="text-xl font-bold text-gray-900 mb-5">Why It Matters</h2>
             <div className="space-y-4">
               {whyMatters.map((item) => (
                 <div key={item} className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-green-600 flex items-center
+                  <div className="w-5 h-5 rounded-full bg-blue-600 flex items-center
                     justify-center flex-shrink-0 mt-0.5">
                     <CheckIcon className="w-3 h-3 text-white" />
                   </div>
@@ -280,7 +280,7 @@ export default function Home() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base font-bold text-gray-900">Latest Community Reports</h2>
-              <a href="#" className="text-green-600 text-xs font-medium flex items-center
+              <a href="#" className="text-blue-600 text-xs font-medium flex items-center
                 gap-1 hover:underline whitespace-nowrap">
                 View all <ArrowRightIcon className="w-3 h-3" />
               </a>
@@ -312,7 +312,7 @@ export default function Home() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base font-bold text-gray-900">From the Blog</h2>
-              <a href="#" className="text-green-600 text-xs font-medium flex items-center
+              <a href="#" className="text-blue-600 text-xs font-medium flex items-center
                 gap-1 hover:underline whitespace-nowrap">
                 View all <ArrowRightIcon className="w-3 h-3" />
               </a>
@@ -325,7 +325,7 @@ export default function Home() {
                     📰
                   </div>
                   <p className="text-xs font-medium text-gray-800 leading-snug
-                    group-hover:text-green-600 transition-colors line-clamp-3">
+                    group-hover:text-blue-600 transition-colors line-clamp-3">
                     {post.title}
                   </p>
                   <p className="text-[10px] text-gray-400 mt-0.5">{post.date}</p>
@@ -337,7 +337,7 @@ export default function Home() {
           {/* Community Impact */}
           <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 flex flex-col justify-center">
             <div className="flex items-center gap-2 mb-4">
-              <UsersIcon className="w-5 h-5 text-green-600" />
+              <UsersIcon className="w-5 h-5 text-blue-600" />
               <h2 className="text-base font-bold text-gray-900">Community Impact</h2>
             </div>
             <div className="mb-4">

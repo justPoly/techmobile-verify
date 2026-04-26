@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+
 const ShieldIcon = ({ className = "" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -45,13 +46,15 @@ export default function Navbar() {
         
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center">
-            <ShieldIcon className="w-5 h-5 text-white" />
-          </div>
+          <img 
+            src="/tm-logo.png"           // Make sure this file is in public/ folder
+            alt="TechMobile NG Logo" 
+            className="w-9 h-9 object-contain" 
+          />
           <div>
             <div className="flex items-center gap-1">
-              <span className="font-bold text-gray-900 text-base leading-tight">Techmobile</span>
-              <span className="bg-green-600 text-white text-[9px] font-bold px-1 py-0.5 rounded leading-none">
+              <span className="font-bold text-blue-900 text-base leading-tight">Techmobile</span>
+              <span className="bg-blue-600 text-white text-[9px] font-bold px-1 py-0.5 rounded leading-none">
                 NG
               </span>
             </div>
@@ -69,8 +72,8 @@ export default function Navbar() {
                 to={to}
                 className={`text-sm transition-colors ${
                   isActive
-                    ? "text-green-600 font-semibold"
-                    : "text-gray-600 hover:text-green-600"
+                    ? "text-blue-600 font-semibold"
+                    : "text-gray-600 hover:text-blue-600"
                 }`}
               >
                 {label}
@@ -85,14 +88,14 @@ export default function Navbar() {
           {/* Login / Sign Up - Hidden on mobile */}
           <Link
             to="/login"
-            className="hidden md:block bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+            className="hidden md:block bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
           >
             Login / Sign Up
           </Link>
 
           {/* Hamburger Menu - Only visible on mobile */}
           <button
-            className="md:hidden p-2 text-gray-600 hover:text-green-600 transition-colors"
+            className="md:hidden p-2 text-gray-600 hover:text-blue-600 transition-colors"
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-label="Toggle menu"
           >
@@ -118,8 +121,8 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className={`px-4 py-3 rounded-xl text-base transition-colors ${
                     isActive
-                      ? "bg-green-50 text-green-600 font-semibold"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-green-600"
+                      ? "bg-green-50 text-blue-600 font-semibold"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-blue-600"
                   }`}
                 >
                   {label}
@@ -131,7 +134,7 @@ export default function Navbar() {
             <Link
               to="/login"
               onClick={() => setMobileOpen(false)}
-              className="mt-4 bg-green-600 hover:bg-green-700 text-white text-base font-semibold py-3 rounded-xl text-center transition-colors"
+              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold py-3 rounded-xl text-center transition-colors"
             >
               Login / Sign Up
             </Link>

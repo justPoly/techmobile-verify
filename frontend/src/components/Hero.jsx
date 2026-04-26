@@ -41,7 +41,7 @@ export default function Hero() {
                 <div className="order-2 md:order-1">
                     <h1 className="text-3xl sm:text-4xl lg:text-5xl text-gray-900 leading-tight mb-4">
                     Check if Any Phone {" "}<br/>
-                    is <span className="text-green-600">Safe to Buy</span>{" "}<br/>
+                    is <span className="text-blue-600">Safe to Buy</span>{" "}<br/>
                     in Nigeria
                     </h1>
                     <p className="text-gray-500 text-base mb-8">
@@ -51,7 +51,7 @@ export default function Hero() {
 
                     {/* Search Bar */}
                     <div className="flex items-center border-2 border-gray-200 rounded-xl overflow-hidden
-                    focus-within:border-green-500 transition-colors bg-white shadow-sm w-full">
+                    focus-within:border-blue-500 transition-colors bg-white shadow-sm w-full">
                     <input
                         type="text"
                         placeholder="Enter phone model (e.g. Samsung Galaxy A54)"
@@ -60,7 +60,7 @@ export default function Hero() {
                         className="flex-1 px-4 py-3 text-sm text-gray-700 outline-none bg-transparent
                         placeholder-gray-400 min-w-0"
                     />
-                    <button className="bg-green-600 hover:bg-green-700 p-3 transition-colors flex-shrink-0">
+                    <button className="bg-blue-600 hover:bg-blue-700 p-3 transition-colors flex-shrink-0">
                         <SearchIcon className="w-5 h-5 text-white" />
                     </button>
                     </div>
@@ -71,7 +71,7 @@ export default function Hero() {
                     {popularSearches.map((s) => (
                         <button key={s}
                         className="text-xs border border-gray-200 rounded-full px-3 py-1 text-gray-600
-                            hover:border-green-400 hover:text-green-600 transition-colors">
+                            hover:border-blue-400 hover:text-blue-600 transition-colors">
                         {s}
                         </button>
                     ))}
@@ -91,10 +91,10 @@ export default function Hero() {
                         p-3 flex items-center gap-3 w-52 sm:w-64 border border-gray-100">
                         <div className="w-10 h-10 bg-green-100 rounded-full flex items-center
                         justify-center flex-shrink-0">
-                        <ShieldIcon className="w-6 h-6 text-green-600" />
+                        <ShieldIcon className="w-6 h-6 text-blue-600" />
                         </div>
                         <div>
-                        <p className="text-green-600 font-bold text-sm sm:text-base">Check Phone Now</p>
+                        <p className="text-blue-600 font-bold text-sm sm:text-base">Check Phone Now</p>
                         <p className="text-gray-500 text-[11px] leading-snug mt-0.5">
                             Powered by regulatory data + community insights
                         </p>
