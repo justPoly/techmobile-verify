@@ -68,7 +68,11 @@ export default function Footer() {
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <ShieldIcon className="w-4 h-4 text-white" />
+                    <img 
+            src="/tm-logo.png"           // Make sure this file is in public/ folder
+            alt="TechMobile NG Logo" 
+            className="w-9 h-9 object-contain" 
+          />
                 </div>
                 <div>
                   <div className="flex items-center gap-1">

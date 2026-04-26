@@ -199,31 +199,38 @@ export default function Home() {
       <section className="w-full py-10 md:py-14">
         <div className={`${container} grid grid-cols-1 md:grid-cols-2 gap-8`}>
 
-          {/* How It Works */}
-          <div>
-            <h2 className="text-xl font-bold text-gray-900 mb-5">How It Works</h2>
-            <div className="flex items-start gap-1 sm:gap-2">
-              {steps.map((step, i) => (
-                <div key={step.num} className="flex items-center flex-1">
-                  <div className="flex-1 bg-blue-50 rounded-2xl p-3 sm:p-4 flex flex-col
-                    items-center text-center border border-gray-100">
-                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-green-100 text-green-600
-                      text-xs font-bold flex items-center justify-center mb-2">
-                      {step.num}
-                    </div>
-                    <div className="mb-1 sm:mb-2">{step.icon}</div>
-                    <p className="font-semibold text-gray-900 text-xs sm:text-sm">{step.title}</p>
-                    <p className="text-gray-500 text-[10px] sm:text-xs mt-1 leading-snug">{step.desc}</p>
-                  </div>
-                  {i < steps.length - 1 && (
-                    <div className="mx-0.5 sm:mx-1 text-gray-300 flex-shrink-0">
-                      <ArrowRightIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                    </div>
-                  )}
+      {/* How It Works */}
+      <div>
+        <h2 className="text-xl font-bold text-gray-900 mb-5">How It Works</h2>
+        <div className="flex items-start gap-1 sm:gap-2">
+          {steps.map((step, i) => (
+            <div key={step.num} className="flex items-center flex-1">
+              <div className="flex-1 bg-blue-50 rounded-2xl p-3 sm:p-4 flex flex-col items-center text-center border border-gray-100">
+                
+                {/* Number - Now Blue */}
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-100 text-blue-600 
+                              text-xs font-bold flex items-center justify-center mb-2">
+                  {step.num}
                 </div>
-              ))}
+
+                {/* Icon - Now Blue */}
+                <div className="mb-1 sm:mb-2 text-blue-600">
+                  {step.icon}
+                </div>
+
+                <p className="font-semibold text-gray-900 text-xs sm:text-sm">{step.title}</p>
+                <p className="text-gray-500 text-[10px] sm:text-xs mt-1 leading-snug">{step.desc}</p>
+              </div>
+
+              {i < steps.length - 1 && (
+                <div className="mx-0.5 sm:mx-1 text-gray-300 flex-shrink-0">
+                  <ArrowRightIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                </div>
+              )}
             </div>
-          </div>
+          ))}
+        </div>
+      </div>
 
           {/* Why It Matters */}
           <div className="bg-green-50 rounded-2xl p-5 sm:p-6 relative overflow-hidden">
