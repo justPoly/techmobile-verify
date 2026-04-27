@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // ── Icons ─────────────────────────────────────────────────────────────────
 const ShieldIcon = ({ className = "" }) => (
@@ -21,11 +22,9 @@ const SearchIcon = ({ className = "" }) => (
 function PulsingSearchIcon() {
   return (
     <div className="relative flex items-center justify-center w-28 h-28">
-      {/* Outer pulse rings */}
       <span className="absolute inline-flex h-full w-full rounded-full bg-green-100 opacity-60 animate-ping" />
       <span className="absolute inline-flex h-20 w-20 rounded-full bg-green-100 opacity-40 animate-ping"
         style={{ animationDelay: "0.3s" }} />
-      {/* Inner circle */}
       <div className="relative z-10 w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center border border-gray-100">
         <SearchIcon className="w-8 h-8 text-green-600" />
       </div>
@@ -38,7 +37,7 @@ function ProgressBar({ progress }) {
   return (
     <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
       <div
-        className="h-full bg-green-500 rounded-full transition-all duration-500 ease-out"
+        className="h-full bg-green-600 rounded-full transition-all duration-500 ease-out"
         style={{ width: `${progress}%` }}
       />
     </div>
@@ -46,24 +45,62 @@ function ProgressBar({ progress }) {
 }
 
 // ── Main component ────────────────────────────────────────────────────────
-export default function LoadingState({ phoneName = "Samsung Galaxy S24 Ultra", onComplete }) {
+export default function LoadingState() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Get phone name passed from Hero search
+  const phoneName = location.state?.phoneName || "Unknown Phone";
+
   const [progress, setProgress] = useState(0);
 
-  // Simulate progress incrementing
+  // Simulate progress
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 95) {
           clearInterval(interval);
-          return prev;
+          return 95;
         }
-        // Slow down as it approaches 95
-        const increment = prev < 60 ? 8 : prev < 80 ? 4 : 1;
+        const increment = prev < 60 ? 10 : prev < 80 ? 5 : 2;
         return Math.min(prev + increment, 95);
       });
-    }, 300);
+    }, 280);
+
     return () => clearInterval(interval);
   }, []);
+
+  // When loading is almost done → call backend and go to Result
+  useEffect(() => {
+    if (progress >= 95) {
+      const timer = setTimeout(async () => {
+        try {
+          const response = await fetch('/api/check-imei.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ input: phoneName })
+          });
+
+          const resultData = await response.json();
+
+          // Navigate to result page with real data from database
+          navigate('/result', { state: resultData });
+
+        } catch (error) {
+          console.error("API Error:", error);
+          navigate('/result', { 
+            state: {
+              status: "error",
+              verdict: "error",
+              message: "Could not connect to server. Please try again."
+            }
+          });
+        }
+      }, 900); // Small delay so user sees 95%+ before transition
+
+      return () => clearTimeout(timer);
+    }
+  }, [progress, navigate, phoneName]);
 
   return (
     <div className="min-h-screen bg-white font-sans text-gray-800 flex flex-col overflow-x-hidden">
