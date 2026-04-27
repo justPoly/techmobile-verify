@@ -4,6 +4,7 @@ import Footer from './components/Footer';
 import Hero from './components/Hero';
 import Home from './pages/Home';
 import Result from './pages/Results';
+import LoadingState from './pages/LoadingState';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         />
 
         {/* Result page - No Hero */}
+        <Route path="/loading" element={<LoadingState />} />
         <Route path="/result" element={<Result />} />
       </Routes>
 

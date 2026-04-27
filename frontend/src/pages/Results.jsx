@@ -1,262 +1,307 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useState } from "react";
 
-export default function Result() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [result, setResult] = useState(null);
-  const [reports, setReports] = useState([]);
-  const [loadingReports, setLoadingReports] = useState(false);
-  const [showReportModal, setShowReportModal] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+// ── Icons ──────────────────────────────────────────────────────────────────
+const ShieldIcon = ({ className = "" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <path d="M9 12l2 2 4-4" />
+  </svg>
+);
 
-  const [reportForm, setReportForm] = useState({
-    imei: '',
-    verdict: '',
-    used_duration: '',
-    buyer_location: '',
-    comment: ''
-  });
+const ChevronLeftIcon = ({ className = "" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
 
-  const [photos, setPhotos] = useState({ photo1: null, photo2: null });
+const ChevronRightIcon = ({ className = "" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
 
-  useEffect(() => {
-    if (location.state) {
-      setResult(location.state);
-      fetchReports(location.state.model || location.state.equipment_name);
-    } else {
-      navigate('/');
-    }
-  }, [location, navigate]);
+const SearchIcon = ({ className = "" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8" />
+    <path d="m21 21-4.35-4.35" />
+  </svg>
+);
 
-  const fetchReports = async (modelName) => {
-    if (!modelName) return;
-    setLoadingReports(true);
-    try {
-      const res = await axios.get(`/api/get-reports.php?model=${encodeURIComponent(modelName)}`);
-      setReports(res.data);
-    } catch (error) {
-      console.error("Failed to load reports");
-      setReports([]);
-    } finally {
-      setLoadingReports(false);
-    }
+const ShareIcon = ({ className = "" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" />
+    <circle cx="18" cy="19" r="3" />
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+  </svg>
+);
+
+const CopyIcon = ({ className = "" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+  </svg>
+);
+
+const WhatsAppIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+  </svg>
+);
+
+const TwitterIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+  </svg>
+);
+
+const FacebookIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
+
+// ── Navbar ─────────────────────────────────────────────────────────────────
+function Navbar() {
+  return (
+    <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+      <div className="w-full px-4 sm:px-6 lg:px-10 max-w-screen-xl mx-auto py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center">
+            <ShieldIcon className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <div className="flex items-center gap-1">
+              <span className="font-bold text-gray-900 text-base leading-tight">PhoneCheck</span>
+              <span className="bg-green-600 text-white text-[9px] font-bold px-1 py-0.5 rounded leading-none">NG</span>
+            </div>
+            <p className="text-[9px] text-gray-400 leading-none">Verify. Trust. Buy Smart.</p>
+          </div>
+        </div>
+        <div className="hidden md:flex items-center gap-6">
+          {["Home", "Check Phone", "Report a Device", "Community", "Blog", "About Us", "FAQ"].map((link) => (
+            <a key={link} href="#"
+              className={`text-sm transition-colors ${link === "Check Phone"
+                ? "text-green-600 font-semibold"
+                : "text-gray-600 hover:text-green-600"}`}>
+              {link}
+            </a>
+          ))}
+        </div>
+        <button className="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+          Login / Sign Up
+        </button>
+      </div>
+    </nav>
+  );
+}
+
+// ── Data ───────────────────────────────────────────────────────────────────
+const deviceInfo = {
+  name: "Samsung Galaxy S24 Ultra",
+  model: "SM-S928B/DS",
+  brand: "Samsung",
+  modelLabel: "Galaxy S24 Ultra",
+  status: "Approved",
+  approvalDate: "March 12, 2024",
+  networks: "All Networks",
+  modelNumber: "SM-S928B/DS",
+  searchDate: "May 20, 2024 • 10:30 AM",
+};
+
+const communityReports = [
+  { name: "Samsung Galaxy S24 Ultra", status: "Approved", statusColor: "text-green-600", statusBg: "bg-green-50", time: "2 days ago" },
+  { name: "Samsung Galaxy S24 Ultra", status: "Approved", statusColor: "text-green-600", statusBg: "bg-green-50", time: "5 days ago" },
+  { name: "Samsung Galaxy S24 Ultra", status: "Approved", statusColor: "text-green-600", statusBg: "bg-green-50", time: "1 week ago" },
+];
+
+// ── Main Component ─────────────────────────────────────────────────────────
+export default function ResultApproved({ onBack, onSearchAgain }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard?.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
-
-  const handleSubmitReport = async () => {
-    if (!reportForm.imei || reportForm.imei.length !== 15) {
-      return alert("Please enter a valid 15-digit IMEI");
-    }
-    if (!reportForm.verdict) return alert("Please select a verdict");
-    if (!photos.photo1 || !photos.photo2) return alert("Please upload 2 photos");
-
-    setSubmitting(true);
-
-    const formData = new FormData();
-    formData.append('imei', reportForm.imei);
-    formData.append('model_name', result.model || result.equipment_name);
-    formData.append('brand', result.brand);
-    formData.append('verdict', reportForm.verdict);
-    formData.append('used_duration', reportForm.used_duration);
-    formData.append('buyer_location', reportForm.buyer_location);
-    formData.append('comment', reportForm.comment);
-    formData.append('photo1', photos.photo1);
-    formData.append('photo2', photos.photo2);
-
-    try {
-      const res = await axios.post('/api/submit-report.php', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      alert(res.data.message || "Report submitted successfully!");
-      setShowReportModal(false);
-      setReportForm({ imei: '', verdict: '', used_duration: '', buyer_location: '', comment: '' });
-      setPhotos({ photo1: null, photo2: null });
-      fetchReports(result.model || result.equipment_name); // Refresh reports
-    } catch (error) {
-      alert("Failed to submit report. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  if (!result) return <p className="text-center py-20">Loading...</p>;
-
-  const isApproved = result.verdict === 'genuine';
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden">
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-800 overflow-x-hidden">
+      <Navbar />
 
-        {/* Header */}
-        <div className="flex items-center justify-between px-8 py-4 border-b bg-white">
-          <div className="flex items-center gap-4">
-            <img src="https://flagcdn.com/w80/ng.png" alt="Nigeria Flag" className="w-8 h-5 rounded-sm" />
-            <span className="text-2xl font-bold text-blue-600">TechMobile.ng</span>
-          </div>
+      <div className="w-full px-4 sm:px-6 lg:px-10 max-w-screen-xl mx-auto py-6">
 
-          <div className="flex items-center gap-3">
-            <img src="https://ncc.gov.ng/images/ncc-logo.png" alt="NCC Logo" className="h-9" onError={(e) => e.target.style.display = 'none'} />
-            <span className="text-sm font-semibold text-gray-500">VERIFY</span>
-          </div>
+        {/* Back link */}
+        <a href="#" onClick={onBack}
+          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-green-600 transition-colors mb-6">
+          <ChevronLeftIcon className="w-4 h-4" />
+          Back to Home
+        </a>
 
-          <button onClick={() => navigate('/')} className="text-sm font-medium text-gray-500 hover:text-gray-900">
-            ← Check Another Phone
-          </button>
-        </div>
+        {/* ── Main 2-col layout ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <div className="p-8 md:p-12">
+          {/* ── LEFT COLUMN (spans 2) ── */}
+          <div className="lg:col-span-2 space-y-4">
 
-          {/* Status */}
-          <div className="text-center mb-8">
-            <div className={`inline-flex items-center gap-2 px-6 py-2 rounded-full text-sm font-bold mb-6 w-fit mx-auto
-              ${isApproved ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-              {isApproved ? '✅ VERIFICATION COMPLETE' : '⚠️ VERIFICATION COMPLETE'}
-            </div>
+            {/* Device card */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="p-5 sm:p-6">
+                <div className="flex flex-col sm:flex-row gap-5">
 
-            <h1 className={`text-4xl font-bold mb-3 ${isApproved ? 'text-green-700' : 'text-red-600'}`}>
-              {isApproved ? 'NCC APPROVED' : 'SUSPICIOUS / HIGH RISK'}
-            </h1>
-
-            <p className="text-gray-600 text-lg max-w-lg mx-auto">
-              {result.message}
-            </p>
-          </div>
-
-          {/* Phone Info */}
-          <div className="max-w-md mx-auto space-y-6 mb-12 text-center">
-            <div>
-              <p className="text-gray-500 text-sm">Brand</p>
-              <p className="text-3xl font-semibold">{result.brand}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 text-sm">Model</p>
-              <p className="text-3xl font-semibold">{result.model || result.equipment_name}</p>
-            </div>
-          </div>
-
-          {/* Community Reports Section */}
-          <div className="border-t pt-10">
-            <h3 className="text-2xl font-bold mb-6">Community Reports ({reports.length})</h3>
-
-            {loadingReports ? (
-              <p className="text-center py-8">Loading reports...</p>
-            ) : reports.length > 0 ? (
-              <div className="space-y-6">
-                {reports.slice(0, 5).map((report, index) => (
-                  <div key={index} className="bg-gray-50 p-6 rounded-2xl">
-                    <div className="flex justify-between items-start">
-                      <span className={`font-semibold ${report.verdict === 'genuine' ? 'text-green-600' : 'text-red-600'}`}>
-                        {report.verdict === 'genuine' ? '✅ Genuine' : report.verdict === 'fake' ? '❌ Fake' : '🔄 Refurbished'}
-                      </span>
-                      <span className="text-sm text-gray-500">{report.used_duration}</span>
+                  {/* Phone image */}
+                  <div className="flex-shrink-0 flex justify-center sm:justify-start">
+                    <div className="w-28 h-36 sm:w-32 sm:h-44 bg-gradient-to-b from-gray-100 to-gray-200 rounded-xl overflow-hidden flex items-center justify-center shadow-inner">
+                      {/* Placeholder phone silhouette */}
+                      <svg viewBox="0 0 80 120" fill="none" className="w-20 h-28 opacity-40">
+                        <rect x="10" y="5" width="60" height="110" rx="10" fill="#94a3b8" />
+                        <rect x="16" y="16" width="48" height="78" rx="3" fill="#cbd5e1" />
+                        <circle cx="40" cy="108" r="4" fill="#94a3b8" />
+                        <rect x="30" y="8" width="20" height="4" rx="2" fill="#94a3b8" />
+                      </svg>
                     </div>
-                    {report.comment && <p className="mt-3 text-gray-700">{report.comment}</p>}
-                    <p className="text-xs text-gray-500 mt-3">Bought from: {report.buyer_location}</p>
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex-1">
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{deviceInfo.name}</h1>
+                    <p className="text-gray-400 text-sm mt-0.5">{deviceInfo.model}</p>
+
+                    {/* NCC Approved badge */}
+                    <div className="inline-flex items-center gap-1.5 mt-3 bg-green-50 border border-green-200 rounded-full px-3 py-1">
+                      <ShieldIcon className="w-4 h-4 text-green-600" />
+                      <span className="text-green-700 text-xs font-semibold">NCC Approved</span>
+                    </div>
+
+                    {/* Specs table */}
+                    <div className="mt-5 space-y-2.5">
+                      {[
+                        { label: "Brand", value: deviceInfo.brand },
+                        { label: "Model", value: deviceInfo.modelLabel },
+                        {
+                          label: "Status", value: (
+                            <span className="flex items-center gap-1.5 text-green-600 font-semibold text-sm">
+                              <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
+                              {deviceInfo.status}
+                            </span>
+                          )
+                        },
+                        { label: "Approval Date", value: deviceInfo.approvalDate },
+                        { label: "Networks", value: deviceInfo.networks },
+                        { label: "Model Number", value: deviceInfo.modelNumber },
+                        { label: "Search Date", value: deviceInfo.searchDate },
+                      ].map(({ label, value }) => (
+                        <div key={label} className="flex items-start gap-4 text-sm">
+                          <span className="w-28 sm:w-36 text-gray-400 flex-shrink-0">{label}</span>
+                          <span className="text-gray-800 font-medium">{value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Approved notice banner */}
+              <div className="mx-5 sm:mx-6 mb-5 sm:mb-6 bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3">
+                <div className="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <ShieldIcon className="w-5 h-5 text-green-600" />
+                </div>
+                <p className="text-green-800 text-sm leading-relaxed">
+                  This device is approved by the Nigerian Communications Commission (NCC) and{" "}
+                  <span className="font-semibold">is safe to use on all networks in Nigeria.</span>
+                </p>
+              </div>
+            </div>
+
+            {/* What does this mean? */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-6">
+              <h2 className="text-base font-bold text-gray-900 mb-2">What does this mean?</h2>
+              <p className="text-gray-500 text-sm leading-relaxed">
+                NCC approval means this device has met all the regulatory requirements set by the
+                Nigerian Communications Commission and is authorized for use in the country.
+              </p>
+              <button
+                onClick={onSearchAgain}
+                className="mt-5 inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-green-400 hover:text-green-600 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
+                <SearchIcon className="w-4 h-4" />
+                Search Another Device
+              </button>
+            </div>
+
+            {/* Share Result */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-6">
+              <h2 className="text-base font-bold text-gray-900 mb-1">Share Result</h2>
+              <p className="text-gray-400 text-xs mb-4">Help others by sharing this result</p>
+              <div className="flex items-center gap-3">
+                {[
+                  { label: "WhatsApp", icon: <WhatsAppIcon />, bg: "bg-green-500 hover:bg-green-600", text: "text-white" },
+                  { label: "Twitter", icon: <TwitterIcon />, bg: "bg-sky-500 hover:bg-sky-600", text: "text-white" },
+                  { label: "Facebook", icon: <FacebookIcon />, bg: "bg-blue-600 hover:bg-blue-700", text: "text-white" },
+                ].map(({ label, icon, bg, text }) => (
+                  <button key={label}
+                    className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-colors ${bg} ${text}`}>
+                    {icon}
+                    <span className="text-[10px] font-medium">{label}</span>
+                  </button>
+                ))}
+                <button
+                  onClick={handleCopy}
+                  className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl border border-gray-200 hover:border-green-400 hover:text-green-600 text-gray-500 transition-colors">
+                  <CopyIcon className="w-5 h-5" />
+                  <span className="text-[10px] font-medium">{copied ? "Copied!" : "Copy Link"}</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* ── RIGHT COLUMN ── */}
+          <div className="space-y-4">
+
+            {/* Community Reports */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-base font-bold text-gray-900">Community Reports</h2>
+                <a href="#" className="text-green-600 text-xs font-medium hover:underline">See all</a>
+              </div>
+              <div className="space-y-3">
+                {communityReports.map((r, i) => (
+                  <div key={i} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                    {/* Phone thumb */}
+                    <div className="w-10 h-12 bg-gradient-to-b from-gray-200 to-gray-300 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg viewBox="0 0 30 44" fill="none" className="w-7 h-10 opacity-50">
+                        <rect x="2" y="2" width="26" height="40" rx="4" fill="#94a3b8" />
+                        <rect x="5" y="7" width="20" height="28" rx="1" fill="#cbd5e1" />
+                        <circle cx="15" cy="39" r="2" fill="#94a3b8" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-gray-900 truncate">{r.name}</p>
+                      <span className={`inline-block text-[10px] font-semibold mt-0.5 px-2 py-0.5 rounded-full ${r.statusBg} ${r.statusColor}`}>
+                        {r.status}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      <span className="text-[10px] text-gray-400">{r.time}</span>
+                      <ChevronRightIcon className="w-3 h-3 text-gray-300" />
+                    </div>
                   </div>
                 ))}
               </div>
-            ) : (
-              <p className="text-gray-500 text-center py-8">No reports yet. Be the first to submit one!</p>
-            )}
-          </div>
+              <button className="w-full mt-3 border border-gray-200 hover:border-green-400 text-gray-600 hover:text-green-600 text-xs font-semibold py-2.5 rounded-xl transition-colors">
+                See all reports
+              </button>
+            </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col gap-3 mt-12 max-w-md mx-auto">
-            <button
-              onClick={() => setShowReportModal(true)}
-              className="w-full bg-gray-900 hover:bg-black text-white py-4 rounded-2xl font-semibold text-lg"
-            >
-              Submit Report
-            </button>
-
-            <button
-              onClick={() => navigate('/')}
-              className="w-full border border-gray-300 py-4 rounded-2xl font-semibold text-lg hover:bg-gray-50"
-            >
-              Check Another Phone
-            </button>
           </div>
         </div>
       </div>
-
-      {/* Submit Report Modal */}
-      {showReportModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-auto">
-            <div className="p-8">
-              <h2 className="text-2xl font-bold mb-6">Submit Your Report</h2>
-
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-sm font-medium mb-2">IMEI Number (15 digits) *</label>
-                  <input
-                    type="text"
-                    maxLength={15}
-                    value={reportForm.imei}
-                    onChange={(e) => setReportForm({...reportForm, imei: e.target.value.replace(/\D/g, '')})}
-                    className="w-full p-4 border rounded-2xl"
-                    placeholder="865456789012345"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Verdict *</label>
-                  <select
-                    value={reportForm.verdict}
-                    onChange={(e) => setReportForm({...reportForm, verdict: e.target.value})}
-                    className="w-full p-4 border rounded-2xl"
-                  >
-                    <option value="">Select Verdict</option>
-                    <option value="genuine">✅ Genuine / Original</option>
-                    <option value="fake">❌ Fake / Counterfeit</option>
-                    <option value="refurbished">🔄 Refurbished sold as New</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">How long have you used it?</label>
-                  <select
-                    value={reportForm.used_duration}
-                    onChange={(e) => setReportForm({...reportForm, used_duration: e.target.value})}
-                    className="w-full p-4 border rounded-2xl"
-                  >
-                    <option value="">Select duration</option>
-                    <option value="Less than 1 month">Less than 1 month</option>
-                    <option value="1-3 months">1-3 months</option>
-                    <option value="3-6 months">3-6 months</option>
-                    <option value="6-12 months">6-12 months</option>
-                    <option value="1 year+">1 year and above</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Upload 2 Photos (Required) *</label>
-                  <div className="grid grid-cols-2 gap-4">
-                    <input type="file" accept="image/*" onChange={(e) => setPhotos({...photos, photo1: e.target.files[0]})} />
-                    <input type="file" accept="image/*" onChange={(e) => setPhotos({...photos, photo2: e.target.files[0]})} />
-                  </div>
-                </div>
-
-                <button
-                  onClick={handleSubmitReport}
-                  disabled={submitting}
-                  className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white py-4 rounded-2xl font-semibold text-lg mt-6"
-                >
-                  {submitting ? "Submitting..." : "Submit My Report"}
-                </button>
-
-                <button
-                  onClick={() => setShowReportModal(false)}
-                  className="w-full py-4 text-gray-500 hover:text-gray-700"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

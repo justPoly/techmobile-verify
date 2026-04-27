@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 const ShieldIcon = ({ className = "" }) => (
@@ -85,6 +86,19 @@ const PhoneQuestionIcon = () => (
 
 // ── Component ────────────────────────────────────────────────────────────────
 export default function Home() {
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+  const query = searchQuery.trim();
+  if (!query) return;
+
+    // Go to loading page with the searched phone name
+  navigate('/loading', { 
+    state: { phoneName: query } 
+  });
+  };
 
   const features = [
     {
