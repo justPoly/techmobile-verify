@@ -58,22 +58,25 @@ const FacebookIcon = () => (
   </svg>
 );
 
-// ── Navbar (unchanged) ─────────────────────────────────────────────────────
-
 // ── Main Component ─────────────────────────────────────────────────────────
 export default function Result() {
   const location = useLocation();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
 
-  // Get real data from backend (via LoadingState)
+  // Data coming from LoadingState → Backend
   const result = location.state || {};
 
-  // Fallback if no data
+  // The name the user actually searched for
+  const searchedName = location.state?.searchedName || 
+                      result.model || 
+                      result.equipment_name || 
+                      "Unknown Phone";
+
   const deviceInfo = {
-    name: result.model || result.equipment_name || "Unknown Phone",
-    brand: result.brand || "Unknown",
-    model: result.model || result.equipment_name || "",
+    name: searchedName,                    // ← This will show prominently
+    brand: result.brand || "Unknown Brand",
+    model: result.model || result.equipment_name || searchedName,
     status: result.verdict === "genuine" ? "Approved" : "Not Found",
     approvalDate: "N/A",
     networks: "All Networks",
@@ -107,7 +110,6 @@ export default function Result() {
           Back to Home
         </button>
 
-        {/* Main Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
           {/* LEFT COLUMN */}
@@ -130,10 +132,14 @@ export default function Result() {
                     </div>
                   </div>
 
-                  {/* Info */}
+                  {/* Info Section - Searched name is shown here */}
                   <div className="flex-1">
-                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{deviceInfo.name}</h1>
-                    <p className="text-gray-400 text-sm mt-0.5">{deviceInfo.model}</p>
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                      {deviceInfo.name}
+                    </h1>
+                    <p className="text-gray-400 text-sm mt-0.5">
+                      {deviceInfo.brand} • {deviceInfo.model}
+                    </p>
 
                     {/* Status Badge */}
                     <div className={`inline-flex items-center gap-1.5 mt-3 rounded-full px-3 py-1 ${isApproved ? 'bg-green-50 border border-green-200' : 'bg-yellow-50 border border-yellow-200'}`}>
@@ -198,11 +204,11 @@ export default function Result() {
               </button>
             </div>
 
-            {/* Share Result - unchanged */}
+            {/* Share Result */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-6">
               <h2 className="text-base font-bold text-gray-900 mb-1">Share Result</h2>
               <p className="text-gray-400 text-xs mb-4">Help others by sharing this result</p>
-              {/* ... your share buttons remain the same ... */}
+              {/* Your share buttons code remains unchanged */}
             </div>
 
           </div>

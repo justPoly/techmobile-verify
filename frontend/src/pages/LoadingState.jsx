@@ -72,7 +72,13 @@ export default function LoadingState() {
 
           const resultData = await response.json();
 
-          navigate('/result', { state: resultData });
+          // Pass both the result data AND the original searched name
+          navigate('/result', { 
+            state: { 
+              ...resultData, 
+              searchedName: phoneName 
+            } 
+          });
 
         } catch (error) {
           console.error("API Error:", error);
@@ -114,7 +120,7 @@ export default function LoadingState() {
           </div>
         </div>
 
-        {/* Sign up nudge card - unchanged */}
+        {/* Sign up nudge card */}
         <div className="w-full max-w-sm sm:max-w-md mt-4 bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-between gap-4">
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
