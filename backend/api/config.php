@@ -4,9 +4,10 @@ $host = 'localhost';
 $dbname = 'techmobile_db';
 $username = 'root';
 $password = '';
+$port = 3307;
 
 // Create connection
-$conn = new mysqli($host, $username, $password, $dbname, 3307);
+$conn = new mysqli($host, $username, $password, $dbname, $port);
 
 // Check connection
 if ($conn->connect_error) {

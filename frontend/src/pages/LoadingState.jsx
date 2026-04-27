@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-// ── Icons ─────────────────────────────────────────────────────────────────
-const ShieldIcon = ({ className = "" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    <path d="M9 12l2 2 4-4" />
-  </svg>
-);
-
 const SearchIcon = ({ className = "" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
     strokeLinecap="round" strokeLinejoin="round">
@@ -18,13 +9,11 @@ const SearchIcon = ({ className = "" }) => (
   </svg>
 );
 
-// ── Animated pulsing search icon ──────────────────────────────────────────
 function PulsingSearchIcon() {
   return (
     <div className="relative flex items-center justify-center w-28 h-28">
       <span className="absolute inline-flex h-full w-full rounded-full bg-green-100 opacity-60 animate-ping" />
-      <span className="absolute inline-flex h-20 w-20 rounded-full bg-green-100 opacity-40 animate-ping"
-        style={{ animationDelay: "0.3s" }} />
+      <span className="absolute inline-flex h-20 w-20 rounded-full bg-green-100 opacity-40 animate-ping" style={{ animationDelay: "0.3s" }} />
       <div className="relative z-10 w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center border border-gray-100">
         <SearchIcon className="w-8 h-8 text-green-600" />
       </div>
@@ -32,7 +21,6 @@ function PulsingSearchIcon() {
   );
 }
 
-// ── Progress bar ──────────────────────────────────────────────────────────
 function ProgressBar({ progress }) {
   return (
     <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
@@ -44,17 +32,14 @@ function ProgressBar({ progress }) {
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────
 export default function LoadingState() {
   const navigate = useNavigate();
   const location = useLocation();
-  
-  // Get phone name passed from Hero search
   const phoneName = location.state?.phoneName || "Unknown Phone";
 
   const [progress, setProgress] = useState(0);
 
-  // Simulate progress
+  // Progress animation
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
@@ -70,7 +55,7 @@ export default function LoadingState() {
     return () => clearInterval(interval);
   }, []);
 
-  // When loading is almost done → call backend and go to Result
+  // Call backend when loading is almost done
   useEffect(() => {
     if (progress >= 95) {
       const timer = setTimeout(async () => {
@@ -81,9 +66,12 @@ export default function LoadingState() {
             body: JSON.stringify({ input: phoneName })
           });
 
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
           const resultData = await response.json();
 
-          // Navigate to result page with real data from database
           navigate('/result', { state: resultData });
 
         } catch (error) {
@@ -96,7 +84,7 @@ export default function LoadingState() {
             }
           });
         }
-      }, 900); // Small delay so user sees 95%+ before transition
+      }, 800);
 
       return () => clearTimeout(timer);
     }
@@ -105,16 +93,11 @@ export default function LoadingState() {
   return (
     <div className="min-h-screen bg-white font-sans text-gray-800 flex flex-col overflow-x-hidden">
 
-      {/* ── Main content ── */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-16">
-
-        {/* Card */}
         <div className="w-full max-w-sm sm:max-w-md bg-white rounded-3xl border border-gray-100 shadow-sm p-8 sm:p-10 flex flex-col items-center text-center gap-6">
 
-          {/* Animated icon */}
           <PulsingSearchIcon />
 
-          {/* Heading */}
           <div className="space-y-2">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
               Searching NCC Database...
@@ -125,15 +108,13 @@ export default function LoadingState() {
             <p className="text-gray-900 font-semibold text-base">{phoneName}</p>
           </div>
 
-          {/* Progress bar */}
           <div className="w-full space-y-2">
             <ProgressBar progress={progress} />
             <p className="text-xs text-gray-400">{progress}% complete</p>
           </div>
-
         </div>
 
-        {/* Sign up nudge card */}
+        {/* Sign up nudge card - unchanged */}
         <div className="w-full max-w-sm sm:max-w-md mt-4 bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-between gap-4">
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -150,7 +131,6 @@ export default function LoadingState() {
             Sign Up Free
           </button>
         </div>
-
       </main>
     </div>
   );
