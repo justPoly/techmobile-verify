@@ -79,7 +79,7 @@ export default function Result() {
     model: result.model || result.equipment_name || searchedName,
     status: result.verdict === "genuine" ? "Approved" : "Not Found",
     approvalDate: "N/A",
-    networks: "All Networks",
+    networks: result.verdict === "genuine" ? "All Networks" : "__",
     modelNumber: "N/A",
     searchDate: new Date().toLocaleString(),
   };
