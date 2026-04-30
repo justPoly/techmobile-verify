@@ -261,42 +261,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CAN'T FIND A PHONE BANNER */}
-      <section className="w-full pb-10 md:pb-14">
-        <div className={container}>
-          <div className="bg-yellow-50 border border-yellow-100 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-
-            {/* Phone Icon with Question Mark */}
-            <div className="flex-shrink-0">
-              <div className="relative w-14 h-14 bg-white rounded-2xl shadow-sm border border-yellow-200 flex items-center justify-center">
-                <PhoneQuestionIcon />
-                {/* Small blue question mark badge */}
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-blue-500 text-white text-xs font-bold rounded-full flex items-center justify-center border-2 border-white">
-                  ?
-                </div>
-              </div>
-            </div>
-
-            {/* Text Content */}
-            <div className="flex-1">
-              <p className="font-semibold text-gray-900 text-base">Can't find a phone model?</p>
-              <p className="text-gray-600 text-sm mt-1 leading-relaxed">
-                If the phone you're looking for is not in our database, you can submit a report to help us update it.
-              </p>
-            </div>
-
-            {/* Report Button */}
-            <button 
-              onClick={() => navigate('/report')}   // Change this to your actual report route
-              className="w-full sm:w-auto flex-shrink-0 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold text-sm px-6 py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
-            >
-              Report a Device
-              <ArrowRightIcon className="w-4 h-4" />
-            </button>
-
-          </div>
+{/* CAN'T FIND A PHONE BANNER */}
+<section className="w-full pb-10 md:pb-14">
+  <div className={container}>
+    <div className="bg-yellow-50 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row 
+      items-start sm:items-center justify-between gap-4 border border-yellow-100">
+      
+      <div className="flex items-start sm:items-center gap-4">
+        <PhoneQuestionIcon />
+        <div>
+          <p className="font-bold text-gray-900 text-base">Can't find a phone? Help Us Improve</p>
+          <p className="text-gray-500 text-sm mt-0.5">
+            If the phone you're looking for is not listed yet (especially new releases), you can submit a 
+            report and help others avoid bad purchases.
+          </p>
         </div>
-      </section>
+      </div>
+
+      <button className="w-full sm:w-auto flex-shrink-0 bg-yellow-400 hover:bg-yellow-500 
+        text-gray-900 font-semibold text-sm px-5 py-2.5 rounded-xl flex items-center 
+        justify-center gap-2 transition-colors">
+        Report a Device
+        <ArrowRightIcon className="w-4 h-4" />
+      </button>
+    </div>
+  </div>
+</section>
 
       {/* ── COMMUNITY + BLOG + IMPACT ─────────────────────────────────────── */}
       <section className="w-full pb-12 md:pb-16">
