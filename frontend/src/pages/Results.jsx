@@ -193,15 +193,26 @@ export default function Result() {
               <h2 className="text-base font-bold text-gray-900 mb-2">What does this mean?</h2>
               <p className="text-gray-500 text-sm leading-relaxed">
                 {isApproved 
-                  ? "NCC approval means this device has met all regulatory requirements and is authorized for use in Nigeria."
-                  : "This model was not found in the current NCC Approved list. It may be a new release or grey import."}
+                  ? "NCC approval means this device has met all regulatory requirements and is authorized for use on all networks in Nigeria."
+                  : "This model was not found in the official NCC Approved list. It could be a very new release that hasn't been added yet, a grey import, or potentially a fake device. We recommend extra caution before purchasing."
+                }
               </p>
-              <button
-                onClick={handleSearchAgain}
-                className="mt-5 inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-green-400 hover:text-green-600 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
-                <SearchIcon className="w-4 h-4" />
-                Search Another Device
-              </button>
+
+              {/* Conditional Button */}
+              {isApproved ? (
+                <button
+                  onClick={handleSearchAgain}
+                  className="mt-5 inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-green-400 hover:text-green-600 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
+                  <SearchIcon className="w-4 h-4" />
+                  Search Another Device
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate('/report')}   // Change this if your report page route is different
+                  className="mt-5 inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
+                  Report this Device
+                </button>
+              )}
             </div>
 
             {/* Share Result */}
