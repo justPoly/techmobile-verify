@@ -130,11 +130,11 @@ export default function Home() {
       desc: "Enter the phone model you want to check.",
       icon: (
         <svg viewBox="0 0 40 40" fill="none" className="w-9 h-9">
-          <rect x="8" y="2" width="18" height="28" rx="3" fill="#f0fdf4" stroke="#16a34a" strokeWidth="1.5" />
-          <circle cx="28" cy="28" r="7" fill="none" stroke="#16a34a" strokeWidth="1.5" />
-          <line x1="33" y1="33" x2="37" y2="37" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round" />
-          <line x1="25" y1="28" x2="31" y2="28" stroke="#16a34a" strokeWidth="1" />
-          <line x1="28" y1="25" x2="28" y2="31" stroke="#16a34a" strokeWidth="1" />
+          <rect x="8" y="2" width="18" height="28" rx="3" fill="#EFF6FF" stroke="#2563EB" strokeWidth="1.5" />
+          <circle cx="28" cy="28" r="7" fill="none" stroke="#2563EB" strokeWidth="1.5" />
+          <line x1="33" y1="33" x2="37" y2="37" stroke="#2563EB" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="25" y1="28" x2="31" y2="28" stroke="#2563EB" strokeWidth="1" />
+          <line x1="28" y1="25" x2="28" y2="31" stroke="#2563EB" strokeWidth="1" />
         </svg>
       ),
     },
@@ -144,10 +144,19 @@ export default function Home() {
       desc: "We check regulatory data",
       icon: (
         <svg viewBox="0 0 40 40" fill="none" className="w-9 h-9">
-          <path d="M20 4l-14 5v9c0 8 6 15 14 18 8-3 14-10 14-18V9L20 4z"
-            fill="#f0fdf4" stroke="#16a34a" strokeWidth="1.5" />
-          <polyline points="14 20 18 24 26 16" stroke="#16a34a" strokeWidth="2"
-            strokeLinecap="round" strokeLinejoin="round" />
+          <path 
+            d="M20 4l-14 5v9c0 8 6 15 14 18 8-3 14-10 14-18V9L20 4z" 
+            fill="#EFF6FF" 
+            stroke="#2563EB" 
+            strokeWidth="1.5" 
+          />
+          <polyline 
+            points="14 20 18 24 26 16" 
+            stroke="#2563EB" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+          />
         </svg>
       ),
     },
@@ -157,9 +166,9 @@ export default function Home() {
       desc: "See if the phone is safe, unverified, or risky.",
       icon: (
         <svg viewBox="0 0 40 40" fill="none" className="w-9 h-9">
-          <rect x="8" y="2" width="18" height="28" rx="3" fill="#f0fdf4" stroke="#16a34a" strokeWidth="1.5" />
-          <path d="M22 2v6h6" stroke="#16a34a" strokeWidth="1.5" fill="#dcfce7" />
-          <polyline points="12 20 16 24 24 16" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round" />
+          <rect x="8" y="2" width="18" height="28" rx="3" fill="#EFF6FF" stroke="#2563EB" strokeWidth="1.5" />
+          <path d="M22 2v6h6" stroke="#2563EB" strokeWidth="1.5" fill="#DBEAFE" />
+          <polyline points="12 20 16 24 24 16" stroke="#2563EB" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
       ),
     },
@@ -221,7 +230,7 @@ export default function Home() {
                 <div key={step.num} className="flex items-center flex-1">
                   <div className="flex-1 bg-blue-50 rounded-2xl p-3 sm:p-4 flex flex-col
                     items-center text-center border border-gray-100">
-                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-green-100 text-green-600
+                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-100 text-blue-600
                       text-xs font-bold flex items-center justify-center mb-2">
                       {step.num}
                     </div>
@@ -240,7 +249,7 @@ export default function Home() {
           </div>
 
           {/* Why It Matters */}
-          <div className="bg-green-50 rounded-2xl p-5 sm:p-6 relative overflow-hidden">
+          <div className="bg-blue-50 rounded-2xl p-5 sm:p-6 relative overflow-hidden">
             <div className="absolute bottom-0 right-0 opacity-10 pointer-events-none">
               <ShieldIcon className="w-32 h-32 sm:w-40 sm:h-40 text-blue-600" />
             </div>
@@ -261,32 +270,32 @@ export default function Home() {
         </div>
       </section>
 
-{/* CAN'T FIND A PHONE BANNER */}
-<section className="w-full pb-10 md:pb-14">
-  <div className={container}>
-    <div className="bg-yellow-50 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row 
-      items-start sm:items-center justify-between gap-4 border border-yellow-100">
-      
-      <div className="flex items-start sm:items-center gap-4">
-        <PhoneQuestionIcon />
-        <div>
-          <p className="font-bold text-gray-900 text-base">Can't find a phone? Help Us Improve</p>
-          <p className="text-gray-500 text-sm mt-0.5">
-            If the phone you're looking for is not listed yet (especially new releases), you can submit a 
-            report and help others avoid bad purchases.
-          </p>
-        </div>
-      </div>
+      {/* CAN'T FIND A PHONE BANNER */}
+      <section className="w-full pb-10 md:pb-14">
+        <div className={container}>
+          <div className="bg-yellow-50 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row 
+            items-start sm:items-center justify-between gap-4 border border-yellow-100">
+            
+            <div className="flex items-start sm:items-center gap-4">
+              <PhoneQuestionIcon />
+              <div>
+                <p className="font-bold text-gray-900 text-base">Can't find a phone? Help Us Improve</p>
+                <p className="text-gray-500 text-sm mt-0.5">
+                  If the phone you're looking for is not listed yet (especially new releases), you can submit a 
+                  report and help others avoid bad purchases.
+                </p>
+              </div>
+            </div>
 
-      <button className="w-full sm:w-auto flex-shrink-0 bg-yellow-400 hover:bg-yellow-500 
-        text-gray-900 font-semibold text-sm px-5 py-2.5 rounded-xl flex items-center 
-        justify-center gap-2 transition-colors">
-        Report a Device
-        <ArrowRightIcon className="w-4 h-4" />
-      </button>
-    </div>
-  </div>
-</section>
+            <button className="w-full sm:w-auto flex-shrink-0 bg-yellow-400 hover:bg-yellow-500 
+              text-gray-900 font-semibold text-sm px-5 py-2.5 rounded-xl flex items-center 
+              justify-center gap-2 transition-colors">
+              Report a Device
+              <ArrowRightIcon className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </section>
 
       {/* ── COMMUNITY + BLOG + IMPACT ─────────────────────────────────────── */}
       <section className="w-full pb-12 md:pb-16">
