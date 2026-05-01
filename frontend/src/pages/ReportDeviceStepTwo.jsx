@@ -155,16 +155,6 @@ export default function ReportDeviceStepTwo() {
                 />
               </Field>
 
-              <Field label="Phone Number" optional>
-                <input 
-                  type="tel" 
-                  value={form.phone} 
-                  onChange={e => set("phone", e.target.value)}
-                  placeholder="0803 123 4567" 
-                  className={inputClass} 
-                />
-              </Field>
-
               {/* Notify Me Checkbox */}
               <label className={`flex items-start gap-3 cursor-pointer p-4 rounded-xl border-2 transition-all
                 ${form.notifyMe ? "border-green-500 bg-green-50/60" : "border-gray-200 hover:border-gray-300"}`}>

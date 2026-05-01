@@ -7,6 +7,7 @@ import Result from './pages/Results';
 import LoadingState from './pages/LoadingState';
 import ReportDeviceStepOne from './pages/ReportDeviceStepOne';
 import ReportDeviceStepTwo from './pages/ReportDeviceStepTwo';
+import ReportDeviceStepThree from './pages/ReportDeviceStepThree';
 import SubmitReport from './pages/SubmitReport';
 
 function App() {
@@ -31,7 +32,8 @@ function App() {
         <Route path="/result" element={<Result />} />
         <Route path="/report-device" element={<ReportDeviceStepOne />} />
         <Route path="/report-device/step2" element={<ReportDeviceStepTwo />} />
-        <Route path="/report-device/step3" element={<SubmitReport />} />
+         <Route path="/report-device/step3" element={<ReportDeviceStepThree />} />
+        <Route path="/report-device/step4" element={<SubmitReport />} />
       </Routes>
 
       <Footer />

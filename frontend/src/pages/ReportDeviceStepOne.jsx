@@ -108,6 +108,34 @@ export default function ReportDeviceStepOne() {
     navigate("/report-device/step2", { 
       state: { formData: form }   // Pass form data to next step
     });
+
+    // set file size limit
+    const addFiles = (files) => {
+      const MAX_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+      const validImages = [];
+      const oversizedFiles = [];
+
+      Array.from(files).forEach(file => {
+        if (!file.type.startsWith("image/")) return;
+
+        if (file.size > MAX_SIZE) {
+          oversizedFiles.push(file.name);
+        } else {
+          validImages.push(file);
+        }
+      });
+
+      if (oversizedFiles.length > 0) {
+        alert(`The following files exceed the 10MB limit and were not added:\n\n${oversizedFiles.join("\n")}`);
+      }
+
+      if (validImages.length > 0) {
+        setForm(f => ({ 
+          ...f, 
+          images: [...f.images, ...validImages] 
+        }));
+      }
+    };
   };
 
   return (
@@ -136,6 +164,20 @@ export default function ReportDeviceStepOne() {
             <p className="text-xs text-gray-400 mt-0.5 mb-6">Tell us about the device you want to report</p>
 
             <div className="space-y-6">
+              {/* Brand - Now Required */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Brand <span className="text-red-400">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  value={form.modelNumber}           // We'll keep the key as modelNumber for now (or change it later)
+                  onChange={e => set("modelNumber", e.target.value)}
+                  placeholder="e.g. Samsung, Tecno, Infinix, Xiaomi"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" 
+                />
+              </div>
+
               {/* Phone Model */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
@@ -150,19 +192,7 @@ export default function ReportDeviceStepOne() {
                 />
               </div>
 
-              {/* Model Number */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Model Number <span className="text-xs font-normal text-gray-400">(if known)</span>
-                </label>
-                <input 
-                  type="text" 
-                  value={form.modelNumber} 
-                  onChange={e => set("modelNumber", e.target.value)}
-                  placeholder="e.g. SM-S928B/DS"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" 
-                />
-              </div>
+
 
               {/* Device Status */}
               <div>
@@ -171,9 +201,9 @@ export default function ReportDeviceStepOne() {
                 </label>
                 <div className="flex flex-wrap gap-3">
                   {[
-                    ["notInDatabase", "Not in NCC database"],
-                    ["incorrectInfo", "Incorrect information"],
-                    ["other", "Other"]
+                    ["notInDatabase", "Not Found / Not Verified"],
+                    ["incorrectInfo", "Suspected Fake"],
+                    ["other", "Not Working Properly"]
                   ].map(([val, label]) => (
                     <label 
                       key={val} 
@@ -198,13 +228,23 @@ export default function ReportDeviceStepOne() {
                 </div>
               </div>
 
-              {/* Upload Images - unchanged */}
+              {/* Upload Images - Required */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Upload Images <span className="text-xs font-normal text-gray-400">(optional)</span>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Upload “About Phone” Screenshot <span className="text-red-400">*</span>
                 </label>
-                <p className="text-xs text-gray-400 mb-3">Upload clear pictures of the device box, settings &gt; about phone, or any other relevant information.</p>
                 
+                <p className="text-xs text-gray-500 mb-3">
+                  Please upload a clear screenshot of your phone’s <strong>“About Phone”</strong> section. 
+                  This is required so we can properly verify the device details.
+                </p>
+
+                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-4 text-xs text-blue-700">
+                  <strong>How to find “About Phone”:</strong><br />
+                  Go to <strong>Settings → About Phone</strong> (or Settings → System → About Phone). 
+                  Take a clear screenshot of the screen showing model name, Android version, and IMEI.
+                </div>
+
                 <label
                   onDragOver={e => { e.preventDefault(); setDragOver(true); }}
                   onDragLeave={() => setDragOver(false)}
@@ -215,20 +255,44 @@ export default function ReportDeviceStepOne() {
                   <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                     <UploadCloudIcon className="w-5 h-5 text-green-600" />
                   </div>
-                  <p className="text-sm font-semibold text-green-600">Upload Images</p>
-                  <p className="text-xs text-gray-400">PNG, JPG up to 5MB</p>
-                  <input type="file" multiple accept="image/*" onChange={e => addFiles(e.target.files)} className="hidden" />
+                  <p className="text-sm font-semibold text-green-600">Upload About Phone Screenshot</p>
+                  <p className="text-xs text-gray-400">PNG, JPG • Maximum 10MB per file</p>
+                  <input 
+                    type="file" 
+                    multiple 
+                    accept="image/*" 
+                    onChange={e => addFiles(e.target.files)} 
+                    className="hidden" 
+                  />
                 </label>
 
                 {form.images.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {form.images.map((file, i) => (
-                      <span key={i} className="inline-flex items-center gap-1.5 text-xs bg-green-50 border border-green-200 text-green-700 font-medium px-3 py-1.5 rounded-lg">
-                        <span className="truncate max-w-[100px]">{file.name}</span>
-                        <button type="button" onClick={() => rmImg(i)} className="text-green-400 hover:text-red-400 transition-colors font-bold">&times;</button>
-                      </span>
-                    ))}
+                  <div className="mt-4">
+                    <p className="text-xs text-gray-500 mb-2">Uploaded images ({form.images.length})</p>
+                    <div className="flex flex-wrap gap-2">
+                      {form.images.map((file, i) => (
+                        <span 
+                          key={i} 
+                          className="inline-flex items-center gap-1.5 text-xs bg-green-50 border border-green-200 text-green-700 font-medium px-3 py-1.5 rounded-lg"
+                        >
+                          <span className="truncate max-w-[160px]">{file.name}</span>
+                          <button 
+                            type="button" 
+                            onClick={() => rmImg(i)} 
+                            className="text-green-400 hover:text-red-500 font-bold"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
                   </div>
+                )}
+
+                {form.images.length === 0 && (
+                  <p className="text-red-500 text-xs mt-1">
+                    * Please upload at least one screenshot of the About Phone section
+                  </p>
                 )}
               </div>
             </div>
