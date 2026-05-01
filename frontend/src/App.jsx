@@ -5,6 +5,9 @@ import Hero from './components/Hero';
 import Home from './pages/Home';
 import Result from './pages/Results';
 import LoadingState from './pages/LoadingState';
+import ReportDeviceStepOne from './pages/ReportDeviceStepOne';
+import ReportDeviceStepTwo from './pages/ReportDeviceStepTwo';
+import SubmitReport from './pages/SubmitReport';
 
 function App() {
   return (
@@ -26,6 +29,9 @@ function App() {
         {/* Result page - No Hero */}
         <Route path="/loading" element={<LoadingState />} />
         <Route path="/result" element={<Result />} />
+        <Route path="/report-device" element={<ReportDeviceStepOne />} />
+        <Route path="/report-device/step2" element={<ReportDeviceStepTwo />} />
+        <Route path="/report-device/step3" element={<SubmitReport />} />
       </Routes>
 
       <Footer />

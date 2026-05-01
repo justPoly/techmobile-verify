@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 const ShieldIcon = ({ className = "" }) => (
@@ -270,32 +270,36 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CAN'T FIND A PHONE BANNER */}
-      <section className="w-full pb-10 md:pb-14">
-        <div className={container}>
-          <div className="bg-yellow-50 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row 
-            items-start sm:items-center justify-between gap-4 border border-yellow-100">
-            
-            <div className="flex items-start sm:items-center gap-4">
-              <PhoneQuestionIcon />
-              <div>
-                <p className="font-bold text-gray-900 text-base">Can't find a phone? Help Us Improve</p>
-                <p className="text-gray-500 text-sm mt-0.5">
-                  If the phone you're looking for is not listed yet (especially new releases), you can submit a 
-                  report and help others avoid bad purchases.
-                </p>
-              </div>
-            </div>
-
-            <button className="w-full sm:w-auto flex-shrink-0 bg-yellow-400 hover:bg-yellow-500 
-              text-gray-900 font-semibold text-sm px-5 py-2.5 rounded-xl flex items-center 
-              justify-center gap-2 transition-colors">
-              Report a Device
-              <ArrowRightIcon className="w-4 h-4" />
-            </button>
-          </div>
+{/* CAN'T FIND A PHONE BANNER */}
+<section className="w-full pb-10 md:pb-14">
+  <div className={container}>
+    <div className="bg-yellow-50 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row 
+      items-start sm:items-center justify-between gap-4 border border-yellow-100">
+      
+      <div className="flex items-start sm:items-center gap-4">
+        <PhoneQuestionIcon />
+        <div>
+          <p className="font-bold text-gray-900 text-base">Can't find a phone? Help Us Improve</p>
+          <p className="text-gray-500 text-sm mt-0.5">
+            If the phone you're looking for is not listed yet (especially new releases), you can submit a 
+            report and help others avoid bad purchases.
+          </p>
         </div>
-      </section>
+      </div>
+
+      {/* Correct way - Use Link as the clickable element */}
+      <Link 
+        to="/report-device"
+        className="w-full sm:w-auto flex-shrink-0 bg-yellow-400 hover:bg-yellow-500 
+          text-gray-900 font-semibold text-sm px-5 py-2.5 rounded-xl flex items-center 
+          justify-center gap-2 transition-colors"
+      >
+        Report a Device
+        <ArrowRightIcon className="w-4 h-4" />
+      </Link>
+    </div>
+  </div>
+</section>
 
       {/* ── COMMUNITY + BLOG + IMPACT ─────────────────────────────────────── */}
       <section className="w-full pb-12 md:pb-16">
