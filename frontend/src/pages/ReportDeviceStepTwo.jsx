@@ -19,7 +19,6 @@ const STEPS = [
   { num: 1, title: "Device Information", desc: "Tell us about the device" },
   { num: 2, title: "Your Information", desc: "Provide your details" },
   { num: 3, title: "Additional Details", desc: "Add more information" },
-  { num: 4, title: "Review & Submit", desc: "Confirm and submit" },
 ];
 
 function StepSidebar({ current }) {

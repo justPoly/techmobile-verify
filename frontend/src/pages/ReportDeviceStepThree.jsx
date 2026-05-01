@@ -28,7 +28,6 @@ const STEPS = [
   { num: 1, title: "Device Information", desc: "Tell us about the device" },
   { num: 2, title: "Your Information", desc: "Provide your details" },
   { num: 3, title: "Additional Details", desc: "Add more information" },
-  { num: 4, title: "Review & Submit", desc: "Confirm and submit" },
 ];
 
 function StepSidebar({ current }) {
@@ -252,7 +251,7 @@ export default function ReportDeviceStepThree({ onBack, onContinue }) {
               </button>
               <button onClick={handleContinue}
                 className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-8 py-3 rounded-xl transition-colors shadow-sm shadow-green-200">
-                Continue
+                Submit
               </button>
             </div>
           </main>

@@ -34,7 +34,6 @@ const STEPS = [
   { num: 1, title: "Device Information", desc: "Tell us about the device" },
   { num: 2, title: "Your Information", desc: "Provide your details" },
   { num: 3, title: "Additional Details", desc: "Add more information" },
-  { num: 4, title: "Review & Submit", desc: "Confirm and submit" },
 ];
 
 export function StepSidebar({ current }) {
@@ -92,50 +91,32 @@ export default function ReportDeviceStepOne() {
     images: f.images.filter((_, idx) => idx !== i)
   }));
 
-  // Handle Continue with Validation
   const handleContinue = () => {
-    if (!form.phoneModel.trim()) {
-      alert("Please enter the Phone Model (required field)");
-      return;
-    }
+  if (!form.modelNumber.trim()) {
+    alert("Please enter the Brand");
+    return;
+  }
 
-    if (!form.deviceStatus) {
-      alert("Please select a Device Status");
-      return;
-    }
+  if (!form.phoneModel.trim()) {
+    alert("Please enter the Phone Model");
+    return;
+  }
 
-    // If validation passes, go to Step 2
-    navigate("/report-device/step2", { 
-      state: { formData: form }   // Pass form data to next step
-    });
+  if (!form.deviceStatus) {
+    alert("Please select a Device Status");
+    return;
+  }
 
-    // set file size limit
-    const addFiles = (files) => {
-      const MAX_SIZE = 10 * 1024 * 1024; // 10MB in bytes
-      const validImages = [];
-      const oversizedFiles = [];
+  // ADD THIS
+  if (form.images.length === 0) {
+    alert("Please upload at least one 'About Phone' screenshot");
+    return;
+  }
 
-      Array.from(files).forEach(file => {
-        if (!file.type.startsWith("image/")) return;
-
-        if (file.size > MAX_SIZE) {
-          oversizedFiles.push(file.name);
-        } else {
-          validImages.push(file);
-        }
-      });
-
-      if (oversizedFiles.length > 0) {
-        alert(`The following files exceed the 10MB limit and were not added:\n\n${oversizedFiles.join("\n")}`);
-      }
-
-      if (validImages.length > 0) {
-        setForm(f => ({ 
-          ...f, 
-          images: [...f.images, ...validImages] 
-        }));
-      }
-    };
+  // Proceed if everything is valid
+  navigate("/report-device/step2", { 
+    state: { formData: form }
+  });
   };
 
   return (
