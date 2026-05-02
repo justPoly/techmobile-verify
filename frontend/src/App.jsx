@@ -10,6 +10,9 @@ import ReportDeviceStepTwo from './pages/ReportDeviceStepTwo';
 import ReportDeviceStepThree from './pages/ReportDeviceStepThree';
 import SubmitReport from './pages/SubmitReport';
 
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+
 function App() {
   return (
     <Router>
@@ -32,8 +35,15 @@ function App() {
         <Route path="/result" element={<Result />} />
         <Route path="/report-device" element={<ReportDeviceStepOne />} />
         <Route path="/report-device/step2" element={<ReportDeviceStepTwo />} />
-         <Route path="/report-device/step3" element={<ReportDeviceStepThree />} />
+        <Route path="/report-device/step3" element={<ReportDeviceStepThree />} />
         <Route path="/report-success" element={<SubmitReport />} />
+
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+
+        {/* Placeholder pages */}
+        <Route path="*" element={<div className="p-20 text-center text-2xl">Page Not Found</div>} />
       </Routes>
 
       <Footer />
