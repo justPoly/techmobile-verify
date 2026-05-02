@@ -3,11 +3,14 @@ import { useNavigate } from 'react-router-dom';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
+
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('isAdminLoggedIn');
+
     if (!isLoggedIn) {
       navigate('/admin/login');
       return;
@@ -17,16 +20,31 @@ export default function AdminDashboard() {
   }, [navigate]);
 
   const fetchPendingReports = async () => {
+    setLoading(true);
+    setError("");
+
     try {
       const res = await fetch('/api/admin/pending-reports.php', {
         headers: {
-          'Authorization': 'admin-secret-token'   // Temporary protection
+          'Authorization': 'admin-secret-token'
         }
       });
+
       const data = await res.json();
-      setReports(data);
+      console.log("API Response:", data);
+
+      // ✅ Handle structured response
+      if (data.success) {
+        setReports(Array.isArray(data.data) ? data.data : []);
+      } else {
+        setReports([]);
+        setError(data.message || "Failed to fetch reports");
+      }
+
     } catch (err) {
       console.error(err);
+      setReports([]);
+      setError("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -36,23 +54,44 @@ export default function AdminDashboard() {
     if (!window.confirm(`Mark this report as ${newStatus}?`)) return;
 
     try {
-      await fetch('/api/admin/update-report.php', {
+      const res = await fetch('/api/admin/update-report.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'admin-secret-token'
+        },
         body: JSON.stringify({ id, status: newStatus })
       });
-      fetchPendingReports(); // Refresh list
+
+      const data = await res.json();
+
+      if (data.success) {
+        fetchPendingReports(); // refresh list
+      } else {
+        alert(data.message);
+      }
+
     } catch (err) {
       alert('Failed to update status');
     }
   };
 
-  if (loading) return <div className="p-10 text-center">Loading reports...</div>;
+  // ⏳ Loading State
+  if (loading) {
+    return (
+      <div className="p-10 text-center text-gray-500">
+        Loading reports...
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
+
+      {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Pending Reports</h1>
+
         <button 
           onClick={() => {
             localStorage.removeItem('isAdminLoggedIn');
@@ -64,39 +103,64 @@ export default function AdminDashboard() {
         </button>
       </div>
 
-      {reports.length === 0 ? (
-        <p className="text-center text-gray-500 py-10">No pending reports at the moment.</p>
+      {/* ❌ Error State */}
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">
+          {error}
+        </div>
+      )}
+
+      {/* 📭 Empty State */}
+      {!Array.isArray(reports) || reports.length === 0 ? (
+        <p className="text-center text-gray-500 py-10">
+          No pending reports at the moment.
+        </p>
       ) : (
+
+        /* 📋 Reports List */
         <div className="space-y-6">
           {reports.map(report => (
-            <div key={report.id} className="bg-white border rounded-2xl p-6">
+            <div key={report.id} className="bg-white border rounded-2xl p-6 shadow-sm">
+
+              {/* Top Section */}
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-semibold text-lg">{report.brand} {report.phone_model}</h3>
-                  <p className="text-sm text-gray-500">Reported by {report.full_name}</p>
+                  <h3 className="font-semibold text-lg">
+                    {report.brand} {report.phone_model}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    Reported by {report.full_name}
+                  </p>
                 </div>
-                <span className="px-4 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm">Pending</span>
+
+                <span className="px-4 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm">
+                  Pending
+                </span>
               </div>
 
+              {/* Info */}
               <div className="mt-4 text-sm space-y-1">
                 <p><strong>Email:</strong> {report.email}</p>
                 <p><strong>Source:</strong> {report.phone_source}</p>
               </div>
 
+              {/* Actions */}
               <div className="mt-6 flex gap-3">
                 <button
                   onClick={() => updateStatus(report.id, 'approved')}
-                  className="flex-1 bg-green-600 text-white py-3 rounded-xl font-medium hover:bg-green-700"
+                  className="flex-1 bg-green-600 text-white py-3 rounded-xl font-medium hover:bg-green-700 transition"
                 >
                   Approve
                 </button>
+
                 <button
                   onClick={() => updateStatus(report.id, 'rejected')}
-                  className="flex-1 bg-red-600 text-white py-3 rounded-xl font-medium hover:bg-red-700"
+                  className="flex-1 bg-red-600 text-white py-3 rounded-xl font-medium hover:bg-red-700 transition"
                 >
                   Reject
                 </button>
               </div>
+
             </div>
           ))}
         </div>
