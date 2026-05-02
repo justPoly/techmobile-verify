@@ -30,7 +30,6 @@ export default function ReportSuccess() {
         fd.append('deviceStatus', formData.deviceStatus || '');
         fd.append('fullName', formData.fullName || '');
         fd.append('email', formData.email || '');
-        fd.append('phoneNumber', formData.phone || '');
         fd.append('phoneSource', formData.phoneSource || '');
         fd.append('additionalInfo', formData.additionalInfo || '');
 
