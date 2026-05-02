@@ -11,65 +11,80 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Get data from FormData
-$imei = trim($_POST['imei'] ?? '');
-$model_name = trim($_POST['model_name'] ?? '');
-$brand = trim($_POST['brand'] ?? '');
-$verdict = $_POST['verdict'] ?? '';
-$used_duration = trim($_POST['used_duration'] ?? '');
-$buyer_location = trim($_POST['buyer_location'] ?? '');
-$comment = trim($_POST['comment'] ?? '');
+try {
+    // Get text data
+    $brand          = trim($_POST['brand'] ?? '');
+    $phoneModel     = trim($_POST['phoneModel'] ?? '');
+    $deviceStatus   = trim($_POST['deviceStatus'] ?? '');
+    $fullName       = trim($_POST['fullName'] ?? '');
+    $email          = trim($_POST['email'] ?? '');
+    $phoneNumber    = trim($_POST['phoneNumber'] ?? '');
+    $phoneSource    = trim($_POST['phoneSource'] ?? '');
+    $additionalInfo = trim($_POST['additionalInfo'] ?? '');
 
-// Basic validation
-if (strlen($imei) !== 15 || empty($model_name) || empty($verdict)) {
-    echo json_encode(['status' => 'error', 'message' => 'IMEI, Model name and Verdict are required']);
-    exit;
+    // Basic validation
+    if (empty($brand) || empty($phoneModel) || empty($fullName) || empty($email)) {
+        echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
+        exit;
+    }
+
+    // Handle image uploads
+    $uploadDir = '../uploads/reports/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    $photo1 = $photo2 = '';
+
+    // Upload first image
+    if (isset($_FILES['photo1']) && $_FILES['photo1']['error'] === 0) {
+        $ext = pathinfo($_FILES['photo1']['name'], PATHINFO_EXTENSION);
+        $photo1 = 'report_' . time() . '_1.' . strtolower($ext);
+        move_uploaded_file($_FILES['photo1']['tmp_name'], $uploadDir . $photo1);
+    }
+
+    // Upload second image (if any)
+    if (isset($_FILES['photo2']) && $_FILES['photo2']['error'] === 0) {
+        $ext = pathinfo($_FILES['photo2']['name'], PATHINFO_EXTENSION);
+        $photo2 = 'report_' . time() . '_2.' . strtolower($ext);
+        move_uploaded_file($_FILES['photo2']['tmp_name'], $uploadDir . $photo2);
+    }
+
+    // Insert into database
+    $sql = "INSERT INTO community_reports 
+            (brand, phone_model, device_status, full_name, email, phone_number, 
+             phone_source, additional_info, photo1, photo2, status, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssssssss", 
+        $brand, 
+        $phoneModel, 
+        $deviceStatus, 
+        $fullName, 
+        $email, 
+        $phoneNumber, 
+        $phoneSource, 
+        $additionalInfo, 
+        $photo1, 
+        $photo2
+    );
+
+    if ($stmt->execute()) {
+        $report_id = "RPT-" . date("Ymd") . "-" . $conn->insert_id;
+        
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Report submitted successfully',
+            'report_id' => $report_id
+        ]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Failed to save report']);
+    }
+
+} catch (Exception $e) {
+    echo json_encode(['status' => 'error', 'message' => 'Server error: ' . $e->getMessage()]);
 }
 
-// Check duplicate IMEI
-$stmt = $conn->prepare("SELECT id FROM community_reports WHERE imei = ?");
-$stmt->bind_param("s", $imei);
-$stmt->execute();
-if ($stmt->get_result()->num_rows > 0) {
-    echo json_encode(['status' => 'error', 'message' => 'This IMEI has already been reported']);
-    exit;
-}
-
-// Create upload directory
-$uploadDir = '../uploads/reports/';
-if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0755, true);
-}
-
-$photo1 = $photo2 = '';
-
-// Upload Photo 1
-if (isset($_FILES['photo1']) && $_FILES['photo1']['error'] == 0) {
-    $photo1 = time() . '_1_' . basename($_FILES['photo1']['name']);
-    move_uploaded_file($_FILES['photo1']['tmp_name'], $uploadDir . $photo1);
-}
-
-// Upload Photo 2
-if (isset($_FILES['photo2']) && $_FILES['photo2']['error'] == 0) {
-    $photo2 = time() . '_2_' . basename($_FILES['photo2']['name']);
-    move_uploaded_file($_FILES['photo2']['tmp_name'], $uploadDir . $photo2);
-}
-
-if (empty($photo1) || empty($photo2)) {
-    echo json_encode(['status' => 'error', 'message' => 'Please upload 2 photos']);
-    exit;
-}
-
-// Insert into database
-$sql = "INSERT INTO community_reports (imei, model_name, brand, verdict, used_duration, buyer_location, comment, photo1, photo2) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sssssssss", $imei, $model_name, $brand, $verdict, $used_duration, $buyer_location, $comment, $photo1, $photo2);
-
-if ($stmt->execute()) {
-    echo json_encode(['status' => 'success', 'message' => 'Thank you! Your report has been published successfully.']);
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Failed to save report']);
-}
+$conn->close();
 ?>

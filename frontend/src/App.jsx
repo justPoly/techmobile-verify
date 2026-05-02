@@ -33,7 +33,7 @@ function App() {
         <Route path="/report-device" element={<ReportDeviceStepOne />} />
         <Route path="/report-device/step2" element={<ReportDeviceStepTwo />} />
          <Route path="/report-device/step3" element={<ReportDeviceStepThree />} />
-        <Route path="/report-device/step4" element={<SubmitReport />} />
+        <Route path="/report-success" element={<SubmitReport />} />
       </Routes>
 
       <Footer />

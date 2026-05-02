@@ -1,132 +1,143 @@
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import confetti from "canvas-confetti";
 
 const CheckIcon = ({ className = "" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="3"
-    strokeLinecap="round" strokeLinejoin="round">
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12" />
-  </svg>
-);
-
-const CopyIcon = ({ className = "" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="2"
-    strokeLinecap="round" strokeLinejoin="round">
-    <rect x="9" y="9" width="13" height="13" rx="2" />
-    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
   </svg>
 );
 
 export default function ReportSuccess() {
   const navigate = useNavigate();
-  const [copied, setCopied] = useState(false);
+  const { state } = useLocation();
 
-  const reportId = "RPT-2026-05-01-00123";
+  const [submitting, setSubmitting] = useState(true);
+  const [success, setSuccess] = useState(false);
+  const [reportId, setReportId] = useState("");
+  const [error, setError] = useState("");
 
-  // 🎉 Confetti burst (clean + short)
+  const formData = state?.formData || {};
+
   useEffect(() => {
-    confetti({
-      particleCount: 120,
-      spread: 80,
-      origin: { y: 0.6 },
-    });
-  }, []);
+    const submitReport = async () => {
+      try {
+        const fd = new FormData();
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(reportId);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+        // Text fields
+        fd.append('brand', formData.brand || formData.modelNumber || '');
+        fd.append('phoneModel', formData.phoneModel || '');
+        fd.append('deviceStatus', formData.deviceStatus || '');
+        fd.append('fullName', formData.fullName || '');
+        fd.append('email', formData.email || '');
+        fd.append('phoneNumber', formData.phone || '');
+        fd.append('phoneSource', formData.phoneSource || '');
+        fd.append('additionalInfo', formData.additionalInfo || '');
 
+        // Images (if any)
+        if (formData.images && formData.images.length > 0) {
+          formData.images.forEach((file, index) => {
+            fd.append(`photo${index + 1}`, file);
+          });
+        }
+
+        const response = await fetch('/api/submit-report.php', {
+          method: 'POST',
+          body: fd,
+        });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+          setReportId(result.report_id || `RPT-${Date.now()}`);
+          setSuccess(true);
+
+          // Celebration confetti
+          confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        } else {
+          setError(result.message || "Failed to submit report");
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Network error. Please check your connection.");
+      } finally {
+        setSubmitting(false);
+      }
+    };
+
+    submitReport();
+  }, [formData]);
+
+  // Loading State
+  if (submitting) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full mx-auto"></div>
+          <p className="mt-6 text-gray-600 font-medium">Submitting your report...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error State
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="text-center max-w-md">
+          <p className="text-red-600 text-lg font-medium">{error}</p>
+          <button
+            onClick={() => navigate(-1)}
+            className="mt-6 px-6 py-3 bg-gray-800 text-white rounded-xl"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Success State
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-16 sm:py-20 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-50 px-4 py-16 flex items-center justify-center">
+      <div className="w-full max-w-lg bg-white rounded-3xl shadow-sm p-10 text-center">
 
-      <div className="w-full max-w-lg bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center">
-
-        {/* Success Icon */}
-        <div className="w-20 h-20 mx-auto rounded-full bg-green-100 flex items-center justify-center mb-4">
-          <CheckIcon className="w-10 h-10 text-green-600" />
+        <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-6">
+          <CheckIcon className="w-12 h-12 text-green-600" />
         </div>
 
-        {/* Title */}
-        <h1 className="text-2xl font-bold text-gray-900">
-          Report Submitted!
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-900">Report Submitted Successfully!</h1>
+        <p className="text-gray-600 mt-3">Thank you for helping keep Nigeria safe from fake phones.</p>
 
-        {/* Subtitle */}
-        <p className="text-gray-500 text-sm mt-2 leading-relaxed">
-          Thank you for helping the community.  
-          Your report has been received and is now under review.
-        </p>
-
-        {/* Report ID */}
-        <div className="mt-6 border border-gray-200 rounded-xl p-4 text-left">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-400">Report ID</p>
-              <p className="font-semibold text-gray-800">{reportId}</p>
-            </div>
-
-            <button
-              onClick={handleCopy}
-              className="p-2 rounded-lg hover:bg-gray-100 transition"
-            >
-              <CopyIcon className="w-4 h-4 text-gray-500" />
-            </button>
-          </div>
-
+        {/* Report ID Card */}
+        <div className="mt-8 bg-gray-50 border border-gray-100 rounded-2xl p-6 text-left">
+          <p className="text-sm text-gray-500">Report ID</p>
+          <p className="font-mono font-semibold text-xl tracking-wider mt-1">{reportId}</p>
           <p className="text-xs text-gray-400 mt-3">
-            Submitted  
-            <br />
-            {new Date().toLocaleString()}
+            Submitted on {new Date().toLocaleString()}
           </p>
-
-          {copied && (
-            <p className="text-xs text-green-600 mt-2">Copied!</p>
-          )}
-        </div>
-
-        {/* What happens next */}
-        <div className="mt-5 border border-gray-100 rounded-xl p-4 text-left bg-gray-50">
-          <h3 className="text-sm font-semibold text-gray-800 mb-2">
-            What happens next?
-          </h3>
-
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li className="flex items-center gap-2">
-              <CheckIcon className="w-4 h-4 text-green-500" />
-              Our system and community will review your report
-            </li>
-            <li className="flex items-center gap-2">
-              <CheckIcon className="w-4 h-4 text-green-500" />
-              You’ll be notified of any updates
-            </li>
-            <li className="flex items-center gap-2">
-              <CheckIcon className="w-4 h-4 text-green-500" />
-              This helps protect other buyers
-            </li>
-          </ul>
         </div>
 
         {/* Buttons */}
-        <div className="mt-6 space-y-3">
+        <div className="mt-8 space-y-3">
           <button
-            onClick={() => navigate("/my-reports")}
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition"
+            onClick={() => navigate('/my-reports')}   // Change this route later when you build tracking page
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-semibold transition"
           >
             Track This Report
           </button>
 
           <button
-            onClick={() => navigate("/")}
-            className="w-full border border-gray-200 hover:border-green-500 hover:text-green-600 text-gray-700 py-3 rounded-xl font-semibold transition"
+            onClick={() => navigate('/')}
+            className="w-full border border-gray-300 hover:bg-gray-50 py-4 rounded-2xl font-semibold transition"
           >
             Check Another Phone
           </button>
         </div>
-
       </div>
     </div>
   );

@@ -129,27 +129,27 @@ export default function ReportDeviceStepThree({ onBack, onContinue }) {
     if (errors[k]) setErrors(e => ({ ...e, [k]: "" }));
   };
 
-  const handleContinue = () => {
-  const newErrors = {};
-  if (!form.phoneSource) {
-     newErrors.phoneSource = "Please select where you got this phone.";
-  }
+  const handleContinue = async () => {
+    const newErrors = {};
+    if (!form.phoneSource) {
+      newErrors.phoneSource = "Please select where you got this phone.";
+    }
 
-  if (Object.keys(newErrors).length > 0) {
-       setErrors(newErrors);
-       return;
-  }
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
-  // Combine ALL steps data
-  const combinedData = {
-    ...previousData,
-    ...form,
-  };
+    // Combine all data from Step 1, 2, and 3
+    const combinedData = {
+      ...previousData,
+      ...form,
+    };
 
-  // Navigate to Step 4
-  navigate("/report-device/step4", {
-        state: { formData: combinedData },
-  });
+    // Navigate directly to success page with all data
+    navigate("/report-success", { 
+      state: { formData: combinedData } 
+    });
   };
 
   const charLimit = 500;
@@ -251,7 +251,7 @@ export default function ReportDeviceStepThree({ onBack, onContinue }) {
               </button>
               <button onClick={handleContinue}
                 className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-8 py-3 rounded-xl transition-colors shadow-sm shadow-green-200">
-                Submit
+                Submit Report
               </button>
             </div>
           </main>
