@@ -1,20 +1,25 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss()
-  ],
+  plugins: [react(), tailwindcss()],
 
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost/backend',     // Points to XAMPP (port 80)
+        target: 'http://localhost/backend',
         changeOrigin: true,
         secure: false,
+
+        // 🔥 THIS IS THE FIX
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq, req) => {
+            if (req.headers['x-admin-token']) {
+              proxyReq.setHeader(
+                'X-Admin-Token',
+                req.headers['x-admin-token']
+              );
+            }
+          });
+        }
       }
     }
   }
-})
+});

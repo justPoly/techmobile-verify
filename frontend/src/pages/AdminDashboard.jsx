@@ -19,36 +19,35 @@ export default function AdminDashboard() {
     fetchPendingReports();
   }, [navigate]);
 
-  const fetchPendingReports = async () => {
+    const fetchPendingReports = async () => {
     setLoading(true);
     setError("");
 
     try {
-      const res = await fetch('/api/admin/pending-reports.php', {
+        const res = await fetch('/api/admin/pending-reports.php', {
         headers: {
-          'Authorization': 'admin-secret-token'
+            'X-Admin-Token': 'admin-secret-token' // ✅ FIXED
         }
-      });
+        });
 
-      const data = await res.json();
-      console.log("API Response:", data);
+        const data = await res.json();
+        console.log("API Response:", data);
 
-      // ✅ Handle structured response
-      if (data.success) {
+        if (data.success) {
         setReports(Array.isArray(data.data) ? data.data : []);
-      } else {
+        } else {
         setReports([]);
         setError(data.message || "Failed to fetch reports");
-      }
+        }
 
     } catch (err) {
-      console.error(err);
-      setReports([]);
-      setError("Network error. Please try again.");
+        console.error(err);
+        setReports([]);
+        setError("Network error. Please try again.");
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+    };
 
   const updateStatus = async (id, newStatus) => {
     if (!window.confirm(`Mark this report as ${newStatus}?`)) return;
@@ -58,7 +57,7 @@ export default function AdminDashboard() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'admin-secret-token'
+          'X-Admin-Token': 'admin-secret-token'
         },
         body: JSON.stringify({ id, status: newStatus })
       });
@@ -76,7 +75,7 @@ export default function AdminDashboard() {
     }
   };
 
-  // ⏳ Loading State
+  // Loading State
   if (loading) {
     return (
       <div className="p-10 text-center text-gray-500">
@@ -117,9 +116,9 @@ export default function AdminDashboard() {
         </p>
       ) : (
 
-        /* 📋 Reports List */
+        /* Reports List */
         <div className="space-y-6">
-          {reports.map(report => (
+          {Array.isArray(reports) && reports.map(report => (
             <div key={report.id} className="bg-white border rounded-2xl p-6 shadow-sm">
 
               {/* Top Section */}
