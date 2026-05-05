@@ -129,7 +129,7 @@ export default function ReportDeviceStepThree({ onBack, onContinue }) {
     if (errors[k]) setErrors(e => ({ ...e, [k]: "" }));
   };
 
-  const handleContinue = async () => {
+  const handleSubmit = async () => {
     const newErrors = {};
     if (!form.phoneSource) {
       newErrors.phoneSource = "Please select where you got this phone.";
@@ -249,7 +249,7 @@ export default function ReportDeviceStepThree({ onBack, onContinue }) {
                 className="border border-gray-200 hover:border-gray-300 text-gray-600 hover:text-gray-800 font-semibold text-sm px-8 py-3 rounded-xl transition-colors">
                 Back
               </button>
-              <button onClick={handleContinue}
+              <button onClick={handleSubmit}
                 className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-8 py-3 rounded-xl transition-colors shadow-sm shadow-green-200">
                 Submit Report
               </button>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import confetti from "canvas-confetti";
 
@@ -17,13 +17,16 @@ export default function ReportSuccess() {
   const [reportId, setReportId] = useState("");
 
   const formData = state?.formData || {};
+  const hasSubmitted = useRef(false);
 
   useEffect(() => {
+    if (hasSubmitted.current) return; // 🚫 prevent second execution
+    hasSubmitted.current = true;
+
     const submitReport = async () => {
       try {
         const fd = new FormData();
 
-        // Text fields (phone_number removed)
         fd.append('brand', formData.brand || formData.modelNumber || '');
         fd.append('phoneModel', formData.phoneModel || '');
         fd.append('deviceStatus', formData.deviceStatus || '');
@@ -32,7 +35,6 @@ export default function ReportSuccess() {
         fd.append('phoneSource', formData.phoneSource || '');
         fd.append('additionalInfo', formData.additionalInfo || '');
 
-        // Images
         if (formData.images && formData.images.length > 0) {
           formData.images.forEach((file, index) => {
             fd.append(`photo${index + 1}`, file);
@@ -48,8 +50,7 @@ export default function ReportSuccess() {
 
         if (result.status === "success") {
           setReportId(result.report_id || `RPT-${Date.now()}`);
-          
-          // Confetti celebration
+
           confetti({
             particleCount: 150,
             spread: 70,
@@ -58,6 +59,7 @@ export default function ReportSuccess() {
         } else {
           setError(result.message || "Failed to submit report");
         }
+
       } catch (err) {
         console.error(err);
         setError("Network error. Please check your connection and try again.");

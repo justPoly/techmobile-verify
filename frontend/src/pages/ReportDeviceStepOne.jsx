@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// ── Icons ──────────────────────────────────────────────────────────────────
+// Icons (keep your existing ones)
 const ShieldCheckIcon = ({ className = "" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -29,14 +29,14 @@ const CheckIcon = ({ className = "" }) => (
   </svg>
 );
 
-// ── Step Sidebar ───────────────────────────────────────────────────────────
+// Step Sidebar
 const STEPS = [
   { num: 1, title: "Device Information", desc: "Tell us about the device" },
   { num: 2, title: "Your Information", desc: "Provide your details" },
   { num: 3, title: "Additional Details", desc: "Add more information" },
 ];
 
-export function StepSidebar({ current }) {
+function StepSidebar({ current }) {
   return (
     <div>
       {STEPS.map((step, i) => {
@@ -49,14 +49,10 @@ export function StepSidebar({ current }) {
                 ${isActive ? "bg-green-600 text-white" : isDone ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"}`}>
                 {isDone ? <CheckIcon className="w-3.5 h-3.5" /> : step.num}
               </div>
-              {i < STEPS.length - 1 && (
-                <div className={`w-px flex-1 my-1 min-h-[28px] ${isDone ? "bg-green-200" : "bg-gray-100"}`} />
-              )}
+              {i < STEPS.length - 1 && <div className={`w-px flex-1 my-1 min-h-[28px] ${isDone ? "bg-green-200" : "bg-gray-100"}`} />}
             </div>
             <div className="pb-7 pt-0.5">
-              <p className={`text-sm font-semibold leading-tight ${isActive ? "text-gray-900" : isDone ? "text-green-600" : "text-gray-400"}`}>
-                {step.title}
-              </p>
+              <p className={`text-sm font-semibold leading-tight ${isActive ? "text-gray-900" : isDone ? "text-green-600" : "text-gray-400"}`}>{step.title}</p>
               <p className={`text-xs mt-0.5 ${isActive ? "text-gray-400" : "text-gray-300"}`}>{step.desc}</p>
             </div>
           </div>
@@ -66,13 +62,13 @@ export function StepSidebar({ current }) {
   );
 }
 
-// ── Main Component ────────────────────────────────────────────────────────
+// Main Component
 export default function ReportDeviceStepOne() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
+    brand: "",
     phoneModel: "",
-    modelNumber: "",
     deviceStatus: "notInDatabase",
     images: []
   });
@@ -92,38 +88,32 @@ export default function ReportDeviceStepOne() {
   }));
 
   const handleContinue = () => {
-  if (!form.modelNumber.trim()) {
-    alert("Please enter the Brand");
-    return;
-  }
+    if (!form.brand.trim()) {
+      alert("Please enter the Brand");
+      return;
+    }
+    if (!form.phoneModel.trim()) {
+      alert("Please enter the Phone Model");
+      return;
+    }
+    if (!form.deviceStatus) {
+      alert("Please select a Device Status");
+      return;
+    }
+    if (form.images.length === 0) {
+      alert("Please upload at least one 'About Phone' screenshot");
+      return;
+    }
 
-  if (!form.phoneModel.trim()) {
-    alert("Please enter the Phone Model");
-    return;
-  }
-
-  if (!form.deviceStatus) {
-    alert("Please select a Device Status");
-    return;
-  }
-
-  // ADD THIS
-  if (form.images.length === 0) {
-    alert("Please upload at least one 'About Phone' screenshot");
-    return;
-  }
-
-  // Proceed if everything is valid
-  navigate("/report-device/step2", { 
-    state: { formData: form }
-  });
+    navigate("/report-device/step2", { 
+      state: { formData: form } 
+    });
   };
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800 overflow-x-hidden">
       <div className="w-full px-4 sm:px-6 lg:px-10 max-w-screen-xl mx-auto py-6">
         
-        {/* Back Button */}
         <button 
           onClick={() => navigate(-1)}
           className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-green-600 mb-6 transition-colors"
@@ -132,28 +122,26 @@ export default function ReportDeviceStepOne() {
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-          {/* Sidebar */}
           <aside className="lg:col-span-1 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
             <h1 className="text-base font-bold text-gray-900 mb-0.5">Report a Device</h1>
             <p className="text-xs text-gray-400 mb-6">Help improve our database</p>
             <StepSidebar current={1} />
           </aside>
 
-          {/* Form */}
           <main className="lg:col-span-3 bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-6">
             <h2 className="text-base font-bold text-gray-900">Device Information</h2>
             <p className="text-xs text-gray-400 mt-0.5 mb-6">Tell us about the device you want to report</p>
 
             <div className="space-y-6">
-              {/* Brand - Now Required */}
+              {/* Brand */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                   Brand <span className="text-red-400">*</span>
                 </label>
                 <input 
                   type="text" 
-                  value={form.modelNumber}           // We'll keep the key as modelNumber for now (or change it later)
-                  onChange={e => set("modelNumber", e.target.value)}
+                  value={form.brand} 
+                  onChange={e => set("brand", e.target.value)}
                   placeholder="e.g. Samsung, Tecno, Infinix, Xiaomi"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" 
                 />
@@ -168,12 +156,17 @@ export default function ReportDeviceStepOne() {
                   type="text" 
                   value={form.phoneModel} 
                   onChange={e => set("phoneModel", e.target.value)}
-                  placeholder="e.g. Samsung Galaxy S24 Ultra"
+                  placeholder="e.g. Galaxy S24 Ultra, Spark 20"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" 
                 />
               </div>
+              
 
+              {/* Device Status - Keep as is */}
+              {/* ... your existing Device Status code ... */}
 
+              {/* Upload Images - Keep as is (Required) */}
+              {/* ... your existing Upload Images code ... */}
 
               {/* Device Status */}
               <div>
@@ -276,6 +269,7 @@ export default function ReportDeviceStepOne() {
                   </p>
                 )}
               </div>
+
             </div>
 
             <div className="flex justify-end pt-8 mt-8 border-t border-gray-100">
@@ -292,3 +286,5 @@ export default function ReportDeviceStepOne() {
     </div>
   );
 }
+
+

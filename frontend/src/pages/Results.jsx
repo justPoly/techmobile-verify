@@ -208,7 +208,7 @@ export default function Result() {
                 </button>
               ) : (
                 <button
-                  onClick={() => navigate('/report')}   // Change this if your report page route is different
+                  onClick={() => navigate('/report-device')}   // Change this if your report page route is different
                   className="mt-5 inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
                   Report this Device
                 </button>
