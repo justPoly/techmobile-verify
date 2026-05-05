@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // ── Icons ────────────────────────────────────────────────────────────────────
@@ -180,11 +180,21 @@ export default function Home() {
     "Always check before you buy!",
   ];
 
-  const communityReports = [
-    { name: "Xiaomi Redmi Note 13 Pro+", reporter: "John D.", time: "2 hours ago", status: "Pending Review", statusColor: "bg-yellow-100 text-yellow-700" },
-    { name: "OnePlus 12R", reporter: "Adaobi M.", time: "5 hours ago", status: "Pending Review", statusColor: "bg-yellow-100 text-yellow-700" },
-    { name: "Realme C67", reporter: "Chinedu O.", time: "1 day ago", status: "Approved", statusColor: "bg-green-100 text-green-700" },
-  ];
+  // const communityReports = [
+  //   { name: "Xiaomi Redmi Note 13 Pro+", reporter: "John D.", time: "2 hours ago", status: "Pending Review", statusColor: "bg-yellow-100 text-yellow-700" },
+  //   { name: "OnePlus 12R", reporter: "Adaobi M.", time: "5 hours ago", status: "Pending Review", statusColor: "bg-yellow-100 text-yellow-700" },
+  //   { name: "Realme C67", reporter: "Chinedu O.", time: "1 day ago", status: "Approved", statusColor: "bg-green-100 text-green-700" },
+  // ];
+
+    const [communityReports, setCommunityReports] = useState([]);
+
+    // Fetch real community reports
+    useEffect(() => {
+      fetch('/api/get-latest-reports.php')
+        .then(res => res.json())
+        .then(data => setCommunityReports(data))
+        .catch(err => console.error(err));
+    }, []);
 
   const blogPosts = [
     { title: "How to Check if a Phone is NCC Approved in Nigeria", date: "May 18, 2024" },
@@ -305,8 +315,43 @@ export default function Home() {
       <section className="w-full pb-12 md:pb-16">
         <div className={`${container} grid grid-cols-1 md:grid-cols-3 gap-8`}>
 
-          {/* Latest Community Reports */}
-          <div>
+      {/* Latest Community Reports */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-base font-bold text-gray-900">Latest Community Reports</h2>
+          <a href="#" className="text-blue-600 text-xs font-medium flex items-center gap-1 hover:underline whitespace-nowrap">
+            View all <ArrowRightIcon className="w-3 h-3" />
+          </a>
+        </div>
+
+        <div className="space-y-3">
+          {communityReports.length > 0 ? (
+            communityReports.map((r) => (
+              <div key={r.id} className="flex items-center gap-3 bg-gray-50 rounded-xl p-3 border border-gray-100">
+                <div className="w-10 h-12 bg-gradient-to-b from-gray-200 to-gray-300 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
+                  📱
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 text-xs truncate">
+                    {r.brand} {r.phone_model}
+                  </p>
+                  <p className="text-gray-400 text-[10px]">
+                    Reported by {r.full_name} • {r.time_ago}
+                  </p>
+                </div>
+                <span className={`text-[10px] font-semibold px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0 
+                  ${r.status === 'approved' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                  {r.status === 'approved' ? 'Approved' : 'Pending'}
+                </span>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500 text-sm py-8 text-center">No community reports yet.</p>
+          )}
+        </div>
+      </div>
+
+          {/* <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base font-bold text-gray-900">Latest Community Reports</h2>
               <a href="#" className="text-blue-600 text-xs font-medium flex items-center
@@ -335,7 +380,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* From the Blog */}
           <div>
