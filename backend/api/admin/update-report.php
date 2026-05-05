@@ -6,8 +6,22 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 require_once '../config.php';
 
-// More flexible authorization check
-$auth = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['HTTP_X_AUTHORIZATION'] ?? '';
+// ✅ Reliable header extraction
+function getAuthorizationHeader() {
+    if (isset($_SERVER['HTTP_X_ADMIN_TOKEN'])) {
+        return $_SERVER['HTTP_X_ADMIN_TOKEN'];
+    }
+
+    // Fallback for Apache
+    $headers = getallheaders();
+    if (isset($headers['X-Admin-Token'])) {
+        return $headers['X-Admin-Token'];
+    }
+
+    return '';
+}
+
+$auth = getAuthorizationHeader();
 
 if ($auth !== 'admin-secret-token') {
     http_response_code(401);
