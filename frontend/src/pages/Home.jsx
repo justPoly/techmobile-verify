@@ -319,7 +319,7 @@ export default function Home() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-base font-bold text-gray-900">Latest Community Reports</h2>
-          <a href="#" className="text-blue-600 text-xs font-medium flex items-center gap-1 hover:underline whitespace-nowrap">
+          <a href="/community" className="text-blue-600 text-xs font-medium flex items-center gap-1 hover:underline whitespace-nowrap">
             View all <ArrowRightIcon className="w-3 h-3" />
           </a>
         </div>
