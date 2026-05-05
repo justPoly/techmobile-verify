@@ -159,11 +159,14 @@ export default function ReportDeviceStepThree({ onBack, onContinue }) {
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800 overflow-x-hidden">
       <div className="w-full px-4 sm:px-6 lg:px-10 max-w-screen-xl mx-auto py-6">
 
-        {/* Back */}
-        <button onClick={onBack}
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-green-600 transition-colors mb-6">
+        {/* Back Button */}
+        <button 
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-green-600 mb-6 transition-colors"
+        >
           <ChevronLeftIcon className="w-4 h-4" /> Back
         </button>
+
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
 
