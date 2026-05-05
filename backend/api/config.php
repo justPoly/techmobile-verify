@@ -1,4 +1,8 @@
 <?php
+
+error_reporting(0);        // Disable error display
+ini_set('display_errors', 0);
+
 // Database Configuration
 $host = 'localhost';
 $dbname = 'techmobile_db';

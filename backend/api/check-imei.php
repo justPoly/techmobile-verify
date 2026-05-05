@@ -59,7 +59,8 @@ if ($result->num_rows > 0) {
         'brand' => $row['manufacturer'],
         'model' => $row['models'],
         'equipment_name' => $row['equipment_name'],
-        'applicant' => $row['applicant']
+        'applicant' => $row['applicant'],
+        'last_updated' => $row['last_updated']  
     ]);
 } else {
     echo json_encode([
