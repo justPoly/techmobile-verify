@@ -351,37 +351,6 @@ export default function Home() {
         </div>
       </div>
 
-          {/* <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-bold text-gray-900">Latest Community Reports</h2>
-              <a href="#" className="text-blue-600 text-xs font-medium flex items-center
-                gap-1 hover:underline whitespace-nowrap">
-                View all <ArrowRightIcon className="w-3 h-3" />
-              </a>
-            </div>
-            <div className="space-y-3">
-              {communityReports.map((r) => (
-                <div key={r.name} className="flex items-center gap-3 bg-gray-50 rounded-xl
-                  p-3 border border-gray-100">
-                  <div className="w-10 h-12 bg-gradient-to-b from-gray-200 to-gray-300
-                    rounded-lg flex items-center justify-center text-lg flex-shrink-0">
-                    📱
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900 text-xs truncate">{r.name}</p>
-                    <p className="text-gray-400 text-[10px]">
-                      Reported by {r.reporter} • {r.time}
-                    </p>
-                  </div>
-                  <span className={`text-[10px] font-semibold px-2 py-1 rounded-full
-                    whitespace-nowrap flex-shrink-0 ${r.statusColor}`}>
-                    {r.status}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div> */}
-
           {/* From the Blog */}
           <div>
             <div className="flex items-center justify-between mb-4">
