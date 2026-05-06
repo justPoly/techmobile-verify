@@ -9,6 +9,7 @@ import ReportDeviceStepOne from './pages/ReportDeviceStepOne';
 import ReportDeviceStepTwo from './pages/ReportDeviceStepTwo';
 import ReportDeviceStepThree from './pages/ReportDeviceStepThree';
 import SubmitReport from './pages/SubmitReport';
+import CommunityReports from './pages/CommunityReport';
 
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
@@ -37,6 +38,7 @@ function App() {
         <Route path="/report-device/step2" element={<ReportDeviceStepTwo />} />
         <Route path="/report-device/step3" element={<ReportDeviceStepThree />} />
         <Route path="/report-success" element={<SubmitReport />} />
+        <Route path="/community" element={<CommunityReports />} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
