@@ -98,9 +98,9 @@ export default function TermsOfUse() {
         {/* ── Hero ── */}
         <section className="py-12 md:py-16 grid grid-cols-1 md:grid-cols-2 gap-10 items-center border-b border-gray-100">
           <div>
-            <span className="inline-block text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full mb-4 tracking-wide uppercase">
+            {/* <span className="inline-block text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full mb-4 tracking-wide uppercase">
               Terms of Use
-            </span>
+            </span> */}
             <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight mb-5">
               Terms of Use
             </h1>
