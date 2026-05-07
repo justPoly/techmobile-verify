@@ -59,93 +59,90 @@ const PhoneQuestionIcon = () => (
 const container = "w-full px-4 sm:px-6 lg:px-8 xl:px-12 max-w-screen-xl mx-auto";
 
 export default function Footer() {
-    return (
-      <footer className="w-full bg-gray-900 text-gray-300 pt-10 pb-6">
-        <div className={container}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pb-8 border-b border-gray-700">
+  return (
+    <footer className="w-full bg-gray-900 text-gray-300 pt-10 pb-6">
+      <div className={container}>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pb-8 border-b border-gray-700">
 
-            {/* Brand — full width on smallest screens */}
-            <div className="col-span-2 md:col-span-1">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <img 
-            src="/tm-logo.png"           // Make sure this file is in public/ folder
-            alt="TechMobile NG Logo" 
-            className="w-9 h-9 object-contain" 
-          />
-                </div>
-                <div>
-                  <div className="flex items-center gap-1">
-                    <span className="font-bold text-white text-sm">Techmobile</span>
-                    <span className="bg-blue-600 text-white text-[8px] font-bold px-1 py-0.5 rounded">NG</span>
-                  </div>
-                  <p className="text-[9px] text-gray-500 leading-none">Verify. Trust. Buy Smart.</p>
-                </div>
+          {/* Brand */}
+          <div className="col-span-2 md:col-span-1">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <img 
+                  src="/tm-logo.png" 
+                  alt="TechMobile NG Logo" 
+                  className="w-9 h-9 object-contain" 
+                />
               </div>
-              <p className="text-xs text-gray-400 leading-relaxed">
-                TechMobile NG helps you check if a phone is safe, genuine, and reliable before you buy.
-                Our mission is to help Nigerians avoid fake, cloned, or unverified devices and make smarter purchasing decisions.
-              </p>
-              <div className="flex gap-3 mt-4">
-                {[
-                  { key: "fb", icon: <FacebookIcon /> },
-                  { key: "tw", icon: <TwitterIcon /> },
-                  { key: "ig", icon: <InstagramIcon /> },
-                  { key: "yt", icon: <YoutubeIcon /> },
-                ].map(({ key, icon }) => (
-                  <a key={key} href="#" className="text-gray-400 hover:text-white transition-colors">
-                    {icon}
-                  </a>
-                ))}
+              <div>
+                <div className="flex items-center gap-1">
+                  <span className="font-bold text-white text-sm">Techmobile</span>
+                  <span className="bg-blue-600 text-white text-[8px] font-bold px-1 py-0.5 rounded">NG</span>
+                </div>
+                <p className="text-[9px] text-gray-500 leading-none">Verify. Trust. Buy Smart.</p>
               </div>
             </div>
-
-            {/* Quick Links */}
-            <div>
-              <h3 className="text-white font-semibold text-sm mb-3">Quick Links</h3>
-              <ul className="space-y-2">
-                {["Home", /*"Check Phone"*/ "Report a Device", "Community", "Blog", "FAQ"].map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-xs text-gray-400 hover:text-white transition-colors">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            <p className="text-xs text-gray-400 leading-relaxed">
+              TechMobile NG helps you check if a phone is safe, genuine, and reliable before you buy.
+              Our mission is to help Nigerians avoid fake, cloned, or unverified devices.
+            </p>
+            <div className="flex gap-3 mt-4">
+              {[
+                { key: "fb", icon: <FacebookIcon /> },
+                { key: "tw", icon: <TwitterIcon /> },
+                { key: "ig", icon: <InstagramIcon /> },
+                { key: "yt", icon: <YoutubeIcon /> },
+              ].map(({ key, icon }) => (
+                <a key={key} href="#" className="text-gray-400 hover:text-white transition-colors">
+                  {icon}
+                </a>
+              ))}
             </div>
+          </div>
 
-            {/* Support */}
-            <div>
-              <h3 className="text-white font-semibold text-sm mb-3">Support</h3>
-              <ul className="space-y-2">
-                {["About Us", "How It Works", "Privacy Policy", "Terms of Use", "Contact Us"].map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-xs text-gray-400 hover:text-white transition-colors">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-white font-semibold text-sm mb-3">Quick Links</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="/" className="text-gray-400 hover:text-white transition-colors">Home</a></li>
+              {/* <li><a href="/check" className="text-gray-400 hover:text-white transition-colors">Check Phone</a></li> */}
+              <li><a href="/report-device" className="text-gray-400 hover:text-white transition-colors">Report a Device</a></li>
+              <li><a href="/community" className="text-gray-400 hover:text-white transition-colors">Community</a></li>
+              <li><a href="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+              <li><a href="/faq" className="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+            </ul>
+          </div>
 
-            {/* Disclaimer */}
-            <div>
-              <h3 className="text-white font-semibold text-sm mb-3">Disclaimer</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">
+          {/* Support */}
+          <div>
+            <h3 className="text-white font-semibold text-sm mb-3">Support</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+              <li><a href="/how-it-works" className="text-gray-400 hover:text-white transition-colors">How It Works</a></li>
+              <li><a href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><a href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Use</a></li>
+              <li><a href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+            </ul>
+          </div>
+
+          {/* Disclaimer */}
+          <div>
+            <h3 className="text-white font-semibold text-sm mb-3">Disclaimer</h3>
+            <p className="text-xs text-gray-400 leading-relaxed">
               TechMobile NG is an independent platform built to help users make safer phone 
               purchases using aggregated data and community insights. 
               While we strive for accuracy, users are advised to make final purchase decisions carefully.
-              </p>
-            </div>
-
+            </p>
           </div>
+
+        </div>
 
         <div className="pt-5 text-center">
           <p className="text-xs text-gray-500">
             © {new Date().getFullYear()} Techmobile NG. All rights reserved.
           </p>
         </div>
-        </div>
-      </footer>
-    )
+      </div>
+    </footer>
+  )
 }

@@ -11,9 +11,12 @@ import ReportDeviceStepThree from './pages/ReportDeviceStepThree';
 import SubmitReport from './pages/SubmitReport';
 import CommunityReports from './pages/CommunityReport';
 import About from './pages/About';
+import PrivacyPolicy from './pages/Privacypolicy';
 
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import TermsOfUse from './pages/Termofuse';
+
 
 function App() {
   return (
@@ -41,6 +44,8 @@ function App() {
         <Route path="/report-success" element={<SubmitReport />} />
         <Route path="/community" element={<CommunityReports />} />
         <Route path="/about" element={<About />}/>
+        <Route path="/privacy" element={<PrivacyPolicy />}/>
+        <Route path="/terms" element={<TermsOfUse />} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
