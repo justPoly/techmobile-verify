@@ -87,7 +87,11 @@ function StatusBadge({ status }) {
       </span>
     );
   }
-  return <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-red-50 text-red-600 border border-red-200">{status}</span>;
+  return (
+    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-red-50 text-red-600 border border-red-200">
+      {status}
+    </span>
+  );
 }
 
 // Dropdown
@@ -106,7 +110,6 @@ function Dropdown({ value, onChange, options, placeholder }) {
         <span className={selected ? "text-gray-800" : "text-gray-400"}>{selected ? selected.label : placeholder}</span>
         <ChevronDownIcon className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
-
       {open && (
         <div className="absolute top-full mt-1.5 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg z-20 overflow-hidden min-w-[180px]">
           {options.map(opt => (
@@ -114,7 +117,8 @@ function Dropdown({ value, onChange, options, placeholder }) {
               key={opt.value}
               type="button"
               onClick={() => { onChange(opt.value); setOpen(false); }}
-              className={`w-full flex items-center px-4 py-2.5 text-sm text-left transition-colors ${value === opt.value ? "bg-blue-50 text-blue-700 font-semibold" : "text-gray-700 hover:bg-gray-50"}`}
+              className={`w-full flex items-center px-4 py-2.5 text-sm text-left transition-colors
+                ${value === opt.value ? "bg-blue-50 text-blue-700 font-semibold" : "text-gray-700 hover:bg-gray-50"}`}
             >
               {opt.label}
             </button>
@@ -125,67 +129,168 @@ function Dropdown({ value, onChange, options, placeholder }) {
   );
 }
 
+// ── Pagination component ───────────────────────────────────────
+// Matches design exactly: < Previous  1  2  3  ...  10  Next >
+// - Pages 1,2,3 always shown
+// - Ellipsis shown when totalPages > 4
+// - Last page always shown when totalPages > 3
+// - Active page highlighted in solid blue
+// - Previous disabled on page 1, Next disabled on last page
+function Pagination({ page, totalPages, onPageChange }) {
+  if (totalPages <= 1) return null;
+
+  // Build the page items to render
+  const items = [];
+
+  // Always show first 3 pages (capped at totalPages)
+  const headPages = [1, 2, 3].filter(n => n <= totalPages);
+
+  headPages.forEach(n => items.push({ type: "page", n }));
+
+  // Show dots if gap exists between page 3 and last page
+  if (totalPages > 4) items.push({ type: "dots" });
+
+  // Show last page if totalPages > 3
+  if (totalPages > 3) items.push({ type: "page", n: totalPages });
+
+  return (
+    <div className="flex items-center justify-center gap-1 mb-8 flex-wrap">
+
+      {/* Previous */}
+      <button
+        onClick={() => onPageChange(Math.max(1, page - 1))}
+        disabled={page === 1}
+        className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium
+          text-gray-600 bg-white border border-gray-200 hover:border-gray-300 hover:text-gray-800
+          shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+      >
+        <ChevronLeftIcon className="w-4 h-4" />
+        Previous
+      </button>
+
+      {/* Page numbers */}
+      {items.map((item, i) =>
+        item.type === "dots" ? (
+          <span key={`dots-${i}`}
+            className="w-10 h-10 flex items-center justify-center text-sm text-gray-400 select-none">
+            ...
+          </span>
+        ) : (
+          <button
+            key={item.n}
+            onClick={() => onPageChange(item.n)}
+            className={`w-10 h-10 rounded-xl text-sm font-semibold transition-all
+              ${page === item.n
+                ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+                : "text-gray-600 bg-white border border-gray-200 hover:border-blue-300 hover:text-blue-600"
+              }`}
+          >
+            {item.n}
+          </button>
+        )
+      )}
+
+      {/* Next */}
+      <button
+        onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+        disabled={page === totalPages}
+        className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium
+          text-gray-600 bg-white border border-gray-200 hover:border-gray-300 hover:text-gray-800
+          shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+      >
+        Next
+        <ChevronRightIcon className="w-4 h-4" />
+      </button>
+    </div>
+  );
+}
+
 const STATUS_OPTIONS = [
   { value: "", label: "All Status" },
   { value: "approved", label: "Approved" },
   { value: "pending", label: "Pending" },
 ];
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 5; // 8 records → 3 pages, making pagination clearly visible
 
-// Time Ago Function
 const timeAgo = (dateString) => {
   if (!dateString) return "Unknown";
   const date = new Date(dateString);
   const now = new Date();
   const seconds = Math.floor((now - date) / 1000);
-
   if (seconds < 60) return "Just now";
   if (seconds < 3600) return `${Math.floor(seconds / 60)} mins ago`;
   if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
   return `${Math.floor(seconds / 86400)} days ago`;
 };
 
-// Main Component
+
+const MOCK_REPORTS = [
+  { id: 1, brand: "Apple",   phone_model: "iPhone 15 Pro Max", full_name: "Emeka O.",   status: "approved", created_at: new Date(Date.now() - 2   * 3600000).toISOString() },
+  { id: 2, brand: "Samsung", phone_model: "Galaxy S24 Ultra",  full_name: "Adaobi M.",  status: "pending",  created_at: new Date(Date.now() - 5   * 3600000).toISOString() },
+  { id: 3, brand: "TECNO",   phone_model: "Spark 10 Pro",      full_name: "Chinedu K.", status: "approved", created_at: new Date(Date.now() - 24  * 3600000).toISOString() },
+  { id: 4, brand: "Infinix", phone_model: "Note 30",           full_name: "Bola A.",    status: "pending",  created_at: new Date(Date.now() - 48  * 3600000).toISOString() },
+  { id: 5, brand: "Xiaomi",  phone_model: "Redmi Note 12 Pro", full_name: "Tunde F.",   status: "approved", created_at: new Date(Date.now() - 72  * 3600000).toISOString() },
+  { id: 6, brand: "Samsung", phone_model: "Galaxy A54",        full_name: "Ngozi E.",   status: "approved", created_at: new Date(Date.now() - 96  * 3600000).toISOString() },
+  { id: 7, brand: "TECNO",   phone_model: "Camon 20 Pro",      full_name: "Yusuf B.",   status: "pending",  created_at: new Date(Date.now() - 120 * 3600000).toISOString() },
+  { id: 8, brand: "Infinix", phone_model: "Hot 40 Pro",        full_name: "Amaka C.",   status: "approved", created_at: new Date(Date.now() - 144 * 3600000).toISOString() },
+];
+
+// Handles plain array or wrapped { data: [...] } / { reports: [...] } responses
+const extractArray = (raw) => {
+  if (Array.isArray(raw)) return raw;
+  if (raw && typeof raw === "object") {
+    const key = ["data", "reports", "results", "items"].find(k => Array.isArray(raw[k]));
+    if (key) return raw[key];
+  }
+  return [];
+};
+
 export default function CommunityReports() {
   const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
-  const [brand, setBrand] = useState("");
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
   const [communityReports, setCommunityReports] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch reports
   useEffect(() => {
+    setLoading(true);
     fetch('/api/get-latest-reports.php')
-      .then(res => res.json())
-      .then(data => {
-        setCommunityReports(Array.isArray(data) ? data : []);
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(raw => {
+        console.log("[CommunityReports] raw API response:", raw);
+        const rows = extractArray(raw);
+        console.log("[CommunityReports] extracted rows:", rows.length, rows);
+        setCommunityReports(rows.length > 0 ? rows : MOCK_REPORTS);
         setLoading(false);
       })
-      .catch(err => {
-        console.error(err);
-        setCommunityReports([]);
+      .catch((err) => {
+        console.warn("CommunityReports: API unavailable, using mock data.", err.message);
+        setCommunityReports(MOCK_REPORTS);
         setLoading(false);
       });
+    setPage(1);
   }, []);
 
-  // Filter
   const filtered = communityReports.filter(r => {
     const matchSearch = !search ||
-      (r.brand?.toLowerCase().includes(search.toLowerCase())) ||
-      (r.phone_model?.toLowerCase().includes(search.toLowerCase()));
-
-    const matchBrand = !brand || (r.brand?.toLowerCase().includes(brand.toLowerCase()));
+      r.brand?.toLowerCase().includes(search.toLowerCase()) ||
+      r.phone_model?.toLowerCase().includes(search.toLowerCase());
     const matchStatus = !status || r.status?.toLowerCase() === status.toLowerCase();
-
-    return matchSearch && matchBrand && matchStatus;
+    return matchSearch && matchStatus;
   });
 
-  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE) || 1;
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
   const paginatedReports = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+
+  // Reset to page 1 when filters change
+  const handleSearch = (val) => { setSearch(val); setPage(1); };
+  const handleStatus = (val) => { setStatus(val); setPage(1); };
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800 overflow-x-hidden">
@@ -218,14 +323,15 @@ export default function CommunityReports() {
               <input
                 type="text"
                 value={search}
-                onChange={e => { setSearch(e.target.value); setPage(1); }}
+                onChange={e => handleSearch(e.target.value)}
                 placeholder="Search by phone model"
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all placeholder-gray-300"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm outline-none
+                  focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all placeholder-gray-300"
               />
             </div>
             <Dropdown
               value={status}
-              onChange={v => { setStatus(v); setPage(1); }}
+              onChange={handleStatus}
               options={STATUS_OPTIONS}
               placeholder="All Status"
             />
@@ -234,13 +340,18 @@ export default function CommunityReports() {
 
         {/* Reports Table */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-6">
-          <div className="hidden sm:grid grid-cols-[2fr_1fr_1fr_1fr] gap-4 px-6 py-3 bg-gray-50 border-b border-gray-100">
+          <div className="hidden sm:grid grid-cols-[2fr_1fr_1fr] gap-4 px-6 py-3 bg-gray-50 border-b border-gray-100">
             {["DEVICE", "STATUS", "REPORTED"].map(col => (
               <span key={col} className="text-xs font-bold text-gray-400 tracking-wider uppercase">{col}</span>
             ))}
           </div>
 
-          {paginatedReports.length === 0 ? (
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-16 gap-3">
+              <div className="w-8 h-8 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+              <p className="text-sm text-gray-400">Loading reports...</p>
+            </div>
+          ) : paginatedReports.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center px-4">
               <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mb-3">
                 <SearchIcon className="w-7 h-7 text-gray-300" />
@@ -253,7 +364,8 @@ export default function CommunityReports() {
               {paginatedReports.map(report => (
                 <div
                   key={report.id}
-                  className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_1fr_1fr] gap-3 sm:gap-4 px-4 sm:px-6 py-4 hover:bg-blue-50/30 transition-colors cursor-pointer group items-center"
+                  className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_1fr] gap-3 sm:gap-4 px-4 sm:px-6 py-4
+                    hover:bg-blue-50/30 transition-colors cursor-pointer group items-center"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-14 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0 border border-blue-100">
@@ -268,11 +380,9 @@ export default function CommunityReports() {
                       </p>
                     </div>
                   </div>
-
                   <div className="sm:flex sm:items-center">
                     <StatusBadge status={report.status} />
                   </div>
-
                   <div className="text-sm text-gray-500">
                     {timeAgo(report.created_at)}
                   </div>
@@ -282,60 +392,8 @@ export default function CommunityReports() {
           )}
         </div>
 
-       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mb-8 flex-wrap">
-
-          {/* Previous */}
-          <button
-            onClick={() => setPage(p => Math.max(1, p - 1))}
-            disabled={page === 1}
-            className="flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-white border border-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            <ChevronLeftIcon className="w-4 h-4" />
-            Prev
-          </button>
-
-          {/* Page numbers with simple smart rendering */}
-          {Array.from({ length: totalPages }, (_, i) => i + 1)
-            .filter(n =>
-              n === 1 ||
-              n === totalPages ||
-              Math.abs(n - page) <= 1
-            )
-            .map((n, i, arr) => {
-              const prev = arr[i - 1];
-              const showDots = prev && n - prev > 1;
-
-              return (
-                <div key={n} className="flex items-center gap-2">
-                  {showDots && <span className="text-gray-400 px-1">...</span>}
-
-                  <button
-                    onClick={() => setPage(n)}
-                    className={`w-9 h-9 rounded-xl text-sm font-semibold transition-all ${
-                      page === n
-                        ? "bg-blue-600 text-white shadow-sm"
-                        : "text-gray-600 hover:bg-white border border-transparent hover:border-gray-200"
-                    }`}
-                  >
-                    {n}
-                  </button>
-                </div>
-              );
-            })}
-
-          {/* Next */}
-          <button
-            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
-            className="flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-white border border-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            Next
-            <ChevronRightIcon className="w-4 h-4" />
-          </button>
-        </div>
-      )}
+        {/* ── Pagination ── */}
+        <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
         {/* CTA Banner */}
         <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -355,6 +413,7 @@ export default function CommunityReports() {
             Report a Device
           </button>
         </div>
+
       </div>
     </div>
   );

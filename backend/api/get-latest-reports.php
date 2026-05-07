@@ -5,11 +5,11 @@ header('Access-Control-Allow-Methods: GET');
 
 require_once 'config.php';
 
-// Fetch latest 4 reports
+// Fetch latest 8 reports
 $sql = "SELECT id, brand, phone_model, full_name, status, created_at 
         FROM community_reports 
         ORDER BY created_at DESC 
-        LIMIT 4";
+        LIMIT 8";
 
 $result = $conn->query($sql);
 $reports = [];
