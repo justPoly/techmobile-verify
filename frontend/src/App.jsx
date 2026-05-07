@@ -27,16 +27,18 @@ function ScrollToHash() {
       const element = document.getElementById(id);
 
       if (element) {
-        // Increased delay to ensure the page is fully rendered
+        // Different delay based on whether we're navigating or already on page
+        const delay = location.pathname === '/' ? 50 : 300;
+        
         setTimeout(() => {
           element.scrollIntoView({
             behavior: 'smooth',
             block: 'start',
           });
-        }, 300);
+        }, delay);
       }
     }
-  }, [location.hash]);
+  }, [location]);
 
   return null;
 }
@@ -45,8 +47,7 @@ function App() {
   return (
     <Router>
       <Navbar />
-
-      <ScrollToHash />   {/* ← This handles smooth scrolling */}
+      <ScrollToHash />   {/* ← Handles both same-page and cross-page scrolling */}
 
       <Routes>
         <Route 
@@ -70,7 +71,6 @@ function App() {
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfUse />} />
 
-        {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} />
 
