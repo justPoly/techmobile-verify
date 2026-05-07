@@ -257,7 +257,7 @@ export default function CommunityReports() {
 
   useEffect(() => {
     setLoading(true);
-    fetch('/api/get-latest-reports.php')
+    fetch('/api/get-community-reports.php')
       .then(res => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
