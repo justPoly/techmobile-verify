@@ -1,4 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect } from "react";
+
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
@@ -12,19 +14,41 @@ import SubmitReport from './pages/SubmitReport';
 import CommunityReports from './pages/CommunityReport';
 import About from './pages/About';
 import PrivacyPolicy from './pages/Privacypolicy';
-
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import TermsOfUse from './pages/Termofuse';
 
+function ScrollToHash() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+
+      if (element) {
+        // Increased delay to ensure the page is fully rendered
+        setTimeout(() => {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }, 300);
+      }
+    }
+  }, [location.hash]);
+
+  return null;
+}
 
 function App() {
   return (
     <Router>
       <Navbar />
 
+      <ScrollToHash />   {/* ← This handles smooth scrolling */}
+
       <Routes>
-        {/* Hero only appears on the homepage */}
         <Route 
           path="/" 
           element={
@@ -35,7 +59,6 @@ function App() {
           } 
         />
 
-        {/* Result page - No Hero */}
         <Route path="/loading" element={<LoadingState />} />
         <Route path="/result" element={<Result />} />
         <Route path="/report-device" element={<ReportDeviceStepOne />} />
@@ -43,15 +66,14 @@ function App() {
         <Route path="/report-device/step3" element={<ReportDeviceStepThree />} />
         <Route path="/report-success" element={<SubmitReport />} />
         <Route path="/community" element={<CommunityReports />} />
-        <Route path="/about" element={<About />}/>
-        <Route path="/privacy" element={<PrivacyPolicy />}/>
+        <Route path="/about" element={<About />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfUse />} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} />
 
-        {/* Placeholder pages */}
         <Route path="*" element={<div className="p-20 text-center text-2xl">Page Not Found</div>} />
       </Routes>
 

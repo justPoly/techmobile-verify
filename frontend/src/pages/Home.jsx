@@ -180,13 +180,7 @@ export default function Home() {
     "Always check before you buy!",
   ];
 
-  // const communityReports = [
-  //   { name: "Xiaomi Redmi Note 13 Pro+", reporter: "John D.", time: "2 hours ago", status: "Pending Review", statusColor: "bg-yellow-100 text-yellow-700" },
-  //   { name: "OnePlus 12R", reporter: "Adaobi M.", time: "5 hours ago", status: "Pending Review", statusColor: "bg-yellow-100 text-yellow-700" },
-  //   { name: "Realme C67", reporter: "Chinedu O.", time: "1 day ago", status: "Approved", statusColor: "bg-green-100 text-green-700" },
-  // ];
-
-    const [communityReports, setCommunityReports] = useState([]);
+  const [communityReports, setCommunityReports] = useState([]);
 
     // Fetch real community reports
     useEffect(() => {
@@ -229,7 +223,7 @@ export default function Home() {
       </section>
 
       {/* ── HOW IT WORKS + WHY IT MATTERS ─────────────────────────────────── */}
-      <section className="w-full py-10 md:py-14">
+      <section id="how-it-works" className="w-full py-10 md:py-14 scroll-mt-20">
         <div className={`${container} grid grid-cols-1 md:grid-cols-2 gap-8`}>
 
           {/* How It Works */}

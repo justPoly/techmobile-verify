@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 // Icons as inline SVGs
 const ShieldIcon = ({ className = "" }) => (
@@ -118,7 +119,15 @@ export default function Footer() {
             <h3 className="text-white font-semibold text-sm mb-3">Support</h3>
             <ul className="space-y-2 text-sm">
               <li><a href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
-              <li><a href="/how-it-works" className="text-gray-400 hover:text-white transition-colors">How It Works</a></li>
+             {/* Quick Links or Support */}
+              <li>
+                <Link 
+                  to="/#how-it-works" 
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  How It Works
+                </Link>
+              </li>
               <li><a href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
               <li><a href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Use</a></li>
               <li><a href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
