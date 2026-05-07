@@ -17,6 +17,8 @@ import PrivacyPolicy from './pages/Privacypolicy';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import TermsOfUse from './pages/Termofuse';
+import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
 
 function ScrollToHash() {
   const location = useLocation();
@@ -46,14 +48,14 @@ function ScrollToHash() {
 function App() {
   return (
     <Router>
-      <Navbar />
       <ScrollToHash />   {/* ← Handles both same-page and cross-page scrolling */}
-
+      <Navbar />
       <Routes>
         <Route 
           path="/" 
           element={
             <>
+              
               <Hero />
               <Home />
             </>
@@ -70,6 +72,8 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfUse />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<FAQ />} />
 
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} />

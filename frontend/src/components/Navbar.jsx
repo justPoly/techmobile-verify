@@ -25,12 +25,12 @@ const CloseIcon = ({ className = "" }) => (
 
 const navLinks = [
   { label: "Home", to: "/" },
-  // { label: "Check Phone", to: "/check-phone" },
   { label: "Report a Device", to: "/report-device" },
   { label: "Community", to: "/community" },
   { label: "About Us", to: "/about" },
   { label: "Blog", to: "/blog" },
   { label: "FAQ", to: "/faq" },
+  { label: "Contact", to: "/contact" },
 ];
 
 export default function Navbar() {
