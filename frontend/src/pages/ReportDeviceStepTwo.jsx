@@ -31,13 +31,13 @@ function StepSidebar({ current }) {
           <div key={step.num} className="flex gap-3">
             <div className="flex flex-col items-center">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0
-                ${isActive ? "bg-green-600 text-white" : isDone ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"}`}>
+                ${isActive ? "bg-blue-600 text-white" : isDone ? "bg-blue-100 text-blue-600" : "bg-gray-100 text-gray-400"}`}>
                 {isDone ? <CheckIcon className="w-3.5 h-3.5" /> : step.num}
               </div>
-              {i < STEPS.length - 1 && <div className={`w-px flex-1 my-1 min-h-[28px] ${isDone ? "bg-green-200" : "bg-gray-100"}`} />}
+              {i < STEPS.length - 1 && <div className={`w-px flex-1 my-1 min-h-[28px] ${isDone ? "bg-blue-200" : "bg-gray-100"}`} />}
             </div>
             <div className="pb-7 pt-0.5">
-              <p className={`text-sm font-semibold leading-tight ${isActive ? "text-gray-900" : isDone ? "text-green-600" : "text-gray-400"}`}>{step.title}</p>
+              <p className={`text-sm font-semibold leading-tight ${isActive ? "text-gray-900" : isDone ? "text-blue-600" : "text-gray-400"}`}>{step.title}</p>
               <p className={`text-xs mt-0.5 ${isActive ? "text-gray-400" : "text-gray-300"}`}>{step.desc}</p>
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function ReportDeviceStepTwo() {
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-  const inputClass = "w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all placeholder-gray-300";
+  const inputClass = "w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all placeholder-gray-300";
 
   // Validation & Continue
   const handleContinue = () => {
@@ -114,7 +114,7 @@ export default function ReportDeviceStepTwo() {
         {/* Back Button */}
         <button 
           onClick={handleBack}
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-green-600 mb-6 transition-colors"
+          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-blue-600 mb-6 transition-colors"
         >
           <ChevronLeftIcon className="w-4 h-4" /> Back
         </button>
@@ -156,12 +156,12 @@ export default function ReportDeviceStepTwo() {
 
               {/* Notify Me Checkbox */}
               <label className={`flex items-start gap-3 cursor-pointer p-4 rounded-xl border-2 transition-all
-                ${form.notifyMe ? "border-green-500 bg-green-50/60" : "border-gray-200 hover:border-gray-300"}`}>
+                ${form.notifyMe ? "border-blue-500 bg-green-50/60" : "border-gray-200 hover:border-gray-300"}`}>
                   <button
                     type="button"
                     onClick={() => set("notifyMe", !form.notifyMe)}
                     className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all
-                      ${form.notifyMe ? "bg-green-600 border-green-600" : "border-gray-300 bg-white"}`}
+                      ${form.notifyMe ? "bg-blue-600 border-blue-600" : "border-gray-300 bg-white"}`}
                   >
                     {form.notifyMe && <CheckIcon className="w-3 h-3 text-white" />}
                   </button>
@@ -182,7 +182,7 @@ export default function ReportDeviceStepTwo() {
 
               <button 
                 onClick={handleContinue}
-                className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-8 py-3 rounded-xl transition-colors"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-8 py-3 rounded-xl transition-colors"
               >
                 Continue
               </button>

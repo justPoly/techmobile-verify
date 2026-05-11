@@ -41,19 +41,19 @@ function StepSidebar({ current }) {
             <div className="flex flex-col items-center">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0
                 ${isActive
-                  ? "bg-green-600 text-white"
+                  ? "bg-blue-600 text-white"
                   : isDone
-                  ? "bg-green-100 text-green-600"
+                  ? "bg-blue-100 text-blue-600"
                   : "bg-gray-100 text-gray-400"}`}>
                 {isDone ? <CheckIcon className="w-3.5 h-3.5" /> : step.num}
               </div>
               {i < STEPS.length - 1 && (
-                <div className={`w-px flex-1 my-1 min-h-[28px] ${isDone ? "bg-green-200" : "bg-gray-100"}`} />
+                <div className={`w-px flex-1 my-1 min-h-[28px] ${isDone ? "bg-blue-200" : "bg-gray-100"}`} />
               )}
             </div>
             <div className="pb-7 pt-0.5">
               <p className={`text-sm font-semibold leading-tight
-                ${isActive ? "text-gray-900" : isDone ? "text-green-600" : "text-gray-400"}`}>
+                ${isActive ? "text-gray-900" : isDone ? "text-blue-600" : "text-gray-400"}`}>
                 {step.title}
               </p>
               <p className={`text-xs mt-0.5 ${isActive ? "text-gray-400" : "text-gray-300"}`}>
@@ -86,7 +86,7 @@ function CustomSelect({ value, onChange, error }) {
         type="button"
         onClick={() => setOpen(o => !o)}
         className={`w-full flex items-center justify-between px-4 py-2.5 border-2 rounded-xl text-sm text-left transition-all outline-none
-          ${open ? "border-green-500 ring-2 ring-green-100" : error ? "border-red-300" : "border-gray-200 hover:border-gray-300"}
+          ${open ? "border-blue-500 ring-2 ring-blue-100" : error ? "border-red-300" : "border-gray-200 hover:border-gray-300"}
           ${value ? "text-gray-800" : "text-gray-400"}`}>
         <span>{selected.label}</span>
         <ChevronDownIcon className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
@@ -101,10 +101,10 @@ function CustomSelect({ value, onChange, error }) {
               onClick={() => { onChange(opt.value); setOpen(false); }}
               className={`w-full flex items-center justify-between px-4 py-3 text-sm text-left transition-colors
                 ${value === opt.value
-                  ? "bg-green-50 text-green-700 font-semibold"
+                  ? "bg-green-50 text-blue-700 font-semibold"
                   : "text-gray-700 hover:bg-gray-50"}`}>
               <span>{opt.label}</span>
-              {value === opt.value && <CheckIcon className="w-4 h-4 text-green-600" />}
+              {value === opt.value && <CheckIcon className="w-4 h-4 text-blue-600" />}
             </button>
           ))}
         </div>
@@ -162,7 +162,7 @@ export default function ReportDeviceStepThree({ onBack, onContinue }) {
         {/* Back Button */}
         <button 
           onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-green-600 mb-6 transition-colors"
+          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-blue-600 mb-6 transition-colors"
         >
           <ChevronLeftIcon className="w-4 h-4" /> Back
         </button>
@@ -220,7 +220,7 @@ export default function ReportDeviceStepThree({ onBack, onContinue }) {
                     rows={5}
                     placeholder="e.g. I bought this phone from a market in Lagos, the seller said it was brand new but it didn't come with a box..."
                     className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 outline-none
-                      focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all
+                      focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all
                       placeholder-gray-300 resize-none leading-relaxed"
                   />
                   <span className={`absolute bottom-3 right-3 text-xs font-medium transition-colors
@@ -253,7 +253,7 @@ export default function ReportDeviceStepThree({ onBack, onContinue }) {
                 Back
               </button>
               <button onClick={handleSubmit}
-                className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-8 py-3 rounded-xl transition-colors shadow-sm shadow-green-200">
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-8 py-3 rounded-xl transition-colors shadow-sm shadow-green-200">
                 Submit Report
               </button>
             </div>
