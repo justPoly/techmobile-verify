@@ -24,7 +24,6 @@ export default function AdminLogin() {
       <div className="max-w-md w-full bg-white rounded-3xl shadow-sm p-10">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Admin Login</h1>
-          <p className="text-gray-500 mt-2">TechMobile.ng Admin Panel</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-5">

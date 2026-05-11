@@ -46,10 +46,10 @@ function StepSidebar({ current }) {
           <div key={step.num} className="flex gap-3">
             <div className="flex flex-col items-center">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0
-                ${isActive ? "bg-green-600 text-white" : isDone ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"}`}>
+                ${isActive ? "bg-blue-600 text-white" : isDone ? "bg-blue-100 text-blue-600" : "bg-gray-100 text-gray-400"}`}>
                 {isDone ? <CheckIcon className="w-3.5 h-3.5" /> : step.num}
               </div>
-              {i < STEPS.length - 1 && <div className={`w-px flex-1 my-1 min-h-[28px] ${isDone ? "bg-green-200" : "bg-gray-100"}`} />}
+              {i < STEPS.length - 1 && <div className={`w-px flex-1 my-1 min-h-[28px] ${isDone ? "bg-blue-200" : "bg-gray-100"}`} />}
             </div>
             <div className="pb-7 pt-0.5">
               <p className={`text-sm font-semibold leading-tight ${isActive ? "text-gray-900" : isDone ? "text-green-600" : "text-gray-400"}`}>{step.title}</p>
@@ -116,7 +116,7 @@ export default function ReportDeviceStepOne() {
         
         <button 
           onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-green-600 mb-6 transition-colors"
+          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-blue-600 mb-6 transition-colors"
         >
           <ChevronLeftIcon className="w-4 h-4" /> Back
         </button>
@@ -143,7 +143,7 @@ export default function ReportDeviceStepOne() {
                   value={form.brand} 
                   onChange={e => set("brand", e.target.value)}
                   placeholder="e.g. Samsung, Tecno, Infinix, Xiaomi"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" 
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all" 
                 />
               </div>
 
@@ -157,7 +157,7 @@ export default function ReportDeviceStepOne() {
                   value={form.phoneModel} 
                   onChange={e => set("phoneModel", e.target.value)}
                   placeholder="e.g. Galaxy S24 Ultra, Spark 20"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" 
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all" 
                 />
               </div>
 
@@ -175,10 +175,10 @@ export default function ReportDeviceStepOne() {
                     <label 
                       key={val} 
                       className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border-2 cursor-pointer text-sm font-medium transition-all
-                        ${form.deviceStatus === val ? "border-green-500 bg-green-50 text-green-700" : "border-gray-200 text-gray-500 hover:border-gray-300"}`}
+                        ${form.deviceStatus === val ? "border-blue-500 bg-blue-50 text-blue-700" : "border-gray-200 text-gray-500 hover:border-gray-300"}`}
                     >
                       <span className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0
-                        ${form.deviceStatus === val ? "border-green-500 bg-green-500" : "border-gray-300"}`}>
+                        ${form.deviceStatus === val ? "border-blue-500 bg-blue-500" : "border-gray-300"}`}>
                         {form.deviceStatus === val && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
                       </span>
                       <input 
@@ -217,12 +217,12 @@ export default function ReportDeviceStepOne() {
                   onDragLeave={() => setDragOver(false)}
                   onDrop={e => { e.preventDefault(); setDragOver(false); addFiles(e.dataTransfer.files); }}
                   className={`flex flex-col items-center justify-center gap-2 w-full border-2 border-dashed rounded-xl py-8 cursor-pointer transition-all
-                    ${dragOver ? "border-blue-400 bg-blue-50" : "border-gray-200 bg-gray-50/60 hover:border-green-300 hover:bg-green-50/40"}`}
+                    ${dragOver ? "border-blue-400 bg-blue-50" : "border-gray-200 bg-gray-50/60 hover:border-blue-300 hover:bg-blue-50/40"}`}
                 >
-                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <UploadCloudIcon className="w-5 h-5 text-green-600" />
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                    <UploadCloudIcon className="w-5 h-5 text-blue-600" />
                   </div>
-                  <p className="text-sm font-semibold text-green-600">Upload About Phone Screenshot</p>
+                  <p className="text-sm font-semibold text-blue-600">Upload About Phone Screenshot</p>
                   <p className="text-xs text-gray-400">PNG, JPG • Maximum 10MB per file</p>
                   <input 
                     type="file" 
@@ -240,7 +240,7 @@ export default function ReportDeviceStepOne() {
                       {form.images.map((file, i) => (
                         <span 
                           key={i} 
-                          className="inline-flex items-center gap-1.5 text-xs bg-green-50 border border-green-200 text-green-700 font-medium px-3 py-1.5 rounded-lg"
+                          className="inline-flex items-center gap-1.5 text-xs bg-blue-50 border border-blue-200 text-blue-700 font-medium px-3 py-1.5 rounded-lg"
                         >
                           <span className="truncate max-w-[160px]">{file.name}</span>
                           <button 
@@ -268,7 +268,7 @@ export default function ReportDeviceStepOne() {
             <div className="flex justify-end pt-8 mt-8 border-t border-gray-100">
               <button 
                 onClick={handleContinue}
-                className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-8 py-3 rounded-xl transition-colors"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-8 py-3 rounded-xl transition-colors"
               >
                 Continue
               </button>
