@@ -12,10 +12,10 @@ const SearchIcon = ({ className = "" }) => (
 function PulsingSearchIcon() {
   return (
     <div className="relative flex items-center justify-center w-28 h-28">
-      <span className="absolute inline-flex h-full w-full rounded-full bg-green-100 opacity-60 animate-ping" />
-      <span className="absolute inline-flex h-20 w-20 rounded-full bg-green-100 opacity-40 animate-ping" style={{ animationDelay: "0.3s" }} />
+      <span className="absolute inline-flex h-full w-full rounded-full bg-blue-100 opacity-60 animate-ping" />
+      <span className="absolute inline-flex h-20 w-20 rounded-full bg-blue-100 opacity-40 animate-ping" style={{ animationDelay: "0.3s" }} />
       <div className="relative z-10 w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center border border-gray-100">
-        <SearchIcon className="w-8 h-8 text-green-600" />
+        <SearchIcon className="w-8 h-8 text-blue-600" />
       </div>
     </div>
   );
@@ -25,7 +25,7 @@ function ProgressBar({ progress }) {
   return (
     <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
       <div
-        className="h-full bg-green-600 rounded-full transition-all duration-500 ease-out"
+        className="h-full bg-blue-600 rounded-full transition-all duration-500 ease-out"
         style={{ width: `${progress}%` }}
       />
     </div>
@@ -106,7 +106,7 @@ export default function LoadingState() {
 
           <div className="space-y-2">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-              Searching NCC Database...
+              Searching...
             </h2>
             <p className="text-gray-500 text-sm leading-relaxed">
               Please wait while we verify the status of
@@ -123,8 +123,8 @@ export default function LoadingState() {
         {/* Sign up nudge card */}
         <div className="w-full max-w-sm sm:max-w-md mt-4 bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-between gap-4">
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-              <SearchIcon className="w-4 h-4 text-green-600" />
+            <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <SearchIcon className="w-4 h-4 text-blue-600" />
             </div>
             <div>
               <p className="text-sm font-semibold text-gray-900">Why wait?</p>
@@ -133,7 +133,7 @@ export default function LoadingState() {
               </p>
             </div>
           </div>
-          <button className="flex-shrink-0 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
+          <button className="flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
             Sign Up Free
           </button>
         </div>

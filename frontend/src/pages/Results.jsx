@@ -109,7 +109,7 @@ const deviceInfo = {
         {/* Back link */}
         <button 
           onClick={() => navigate('/')}
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-green-600 transition-colors mb-6"
+          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-blue-600 transition-colors mb-6"
         >
           <ChevronLeftIcon className="w-4 h-4" />
           Back to Home
