@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const SearchIcon = ({ className = "" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
@@ -134,7 +134,9 @@ export default function LoadingState() {
             </div>
           </div>
           <button className="flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
-            Sign Up Free
+              <Link to="/signup" className="text-white-600 font-semibold hover:bold" >
+                 Sign Up Free
+              </Link>
           </button>
         </div>
       </main>

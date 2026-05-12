@@ -102,7 +102,7 @@ export default function ReportSuccess() {
     <div className="min-h-screen bg-gray-50 px-4 py-16 flex items-center justify-center">
       <div className="w-full max-w-lg bg-white rounded-3xl shadow-sm p-10 text-center">
 
-        <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-6">
+        <div className="w-20 h-20 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-6">
           <CheckIcon className="w-12 h-12 text-green-600" />
         </div>
 
@@ -120,7 +120,7 @@ export default function ReportSuccess() {
         <div className="mt-8 space-y-3">
           <button
             onClick={() => navigate('/my-reports')}
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-semibold transition"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-semibold transition"
           >
             Track This Report
           </button>

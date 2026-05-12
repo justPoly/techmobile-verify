@@ -73,21 +73,21 @@ export default function Result() {
                       result.equipment_name || 
                       "Unknown Phone";
 
-const deviceInfo = {
-  name: searchedName,
-  brand: result.brand || "Unknown",
-  model: result.model || result.equipment_name || searchedName,
-  status: result.verdict === "genuine" ? "Approved" : "Not Found",
-  approvalDate: result.last_updated 
-                ? new Date(result.last_updated).toLocaleDateString('en-GB', { 
-                    day: '2-digit', 
-                    month: 'short', 
-                    year: 'numeric' 
-                  }) 
-                : "N/A",
-  networks: result.verdict === "genuine" ? "All Networks" : "—",
-  searchDate: new Date().toLocaleString(),
-};
+  const deviceInfo = {
+    name: searchedName,
+    brand: result.brand || "Unknown",
+    model: result.model || result.equipment_name || searchedName,
+    status: result.verdict === "genuine" ? "Approved" : "Not Found",
+    approvalDate: result.last_updated 
+                  ? new Date(result.last_updated).toLocaleDateString('en-GB', { 
+                      day: '2-digit', 
+                      month: 'short', 
+                      year: 'numeric' 
+                    }) 
+                  : "N/A",
+    networks: result.verdict === "genuine" ? "All Networks" : "—",
+    searchDate: new Date().toLocaleString(),
+  };
 
   const isApproved = result.verdict === "genuine";
 
