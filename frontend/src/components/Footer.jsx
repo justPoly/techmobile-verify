@@ -3,20 +3,11 @@ import { Link } from "react-router-dom";
 
 // Icons as inline SVGs
 const ShieldIcon = ({ className = "" }) => (
-  <svg 
-    className={className} 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2.5"
-    strokeLinecap="round" 
-    strokeLinejoin="round"
-  >
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    <path d="M9 12l2 2 4-4" />   {/* Checkmark inside the shield */}
+    <path d="M9 12l2 2 4-4" />
   </svg>
 );
-
 
 const FacebookIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -45,18 +36,6 @@ const YoutubeIcon = () => (
   </svg>
 );
 
-const PhoneQuestionIcon = () => (
-  <svg viewBox="0 0 60 80" fill="none" className="w-16 h-16">
-    <rect x="8" y="4" width="44" height="72" rx="6" fill="#f0fdf4" stroke="#16a34a" strokeWidth="2" />
-    <rect x="14" y="12" width="32" height="48" rx="2" fill="#dcfce7" />
-    <circle cx="30" cy="68" r="3" fill="#16a34a" />
-    <text x="21" y="44" fontSize="22" fontWeight="bold" fill="#16a34a">?</text>
-    <circle cx="46" cy="16" r="10" fill="#f59e0b" />
-    <text x="42" y="21" fontSize="14" fontWeight="bold" fill="white">?</text>
-  </svg>
-);
-
-// Shared container: full-width mobile, centred with padding on desktop
 const container = "w-full px-4 sm:px-6 lg:px-8 xl:px-12 max-w-screen-xl mx-auto";
 
 export default function Footer() {
@@ -69,11 +48,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <img 
-                  src="/tm-logo.png" 
-                  alt="TechMobile NG Logo" 
-                  className="w-9 h-9 object-contain" 
-                />
+                <img src="/tm-logo.png" alt="TechMobile NG Logo" className="w-9 h-9 object-contain" />
               </div>
               <div>
                 <div className="flex items-center gap-1">
@@ -85,19 +60,12 @@ export default function Footer() {
             </div>
             <p className="text-xs text-gray-400 leading-relaxed">
               TechMobile NG helps you check if a phone is safe, genuine, and reliable before you buy.
-              Our mission is to help Nigerians avoid fake, cloned, or unverified devices.
             </p>
             <div className="flex gap-3 mt-4">
-              {[
-                { key: "fb", icon: <FacebookIcon /> },
-                { key: "tw", icon: <TwitterIcon /> },
-                { key: "ig", icon: <InstagramIcon /> },
-                { key: "yt", icon: <YoutubeIcon /> },
-              ].map(({ key, icon }) => (
-                <a key={key} href="#" className="text-gray-400 hover:text-white transition-colors">
-                  {icon}
-                </a>
-              ))}
+              <a href="#" className="text-gray-400 hover:text-white transition-colors"><FacebookIcon /></a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors"><TwitterIcon /></a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors"><InstagramIcon /></a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors"><YoutubeIcon /></a>
             </div>
           </div>
 
@@ -105,12 +73,11 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold text-sm mb-3">Quick Links</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="/" className="text-gray-400 hover:text-white transition-colors">Home</a></li>
-              {/* <li><a href="/check" className="text-gray-400 hover:text-white transition-colors">Check Phone</a></li> */}
-              <li><a href="/report-device" className="text-gray-400 hover:text-white transition-colors">Report a Device</a></li>
-              <li><a href="/community" className="text-gray-400 hover:text-white transition-colors">Community</a></li>
-              <li><a href="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
-              <li><a href="/faq" className="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+              <li><Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
+              <li><Link to="/report-device" className="text-gray-400 hover:text-white transition-colors">Report a Device</Link></li>
+              <li><Link to="/community" className="text-gray-400 hover:text-white transition-colors">Community</Link></li>
+              <li><Link to="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</Link></li>
+              <li><Link to="/faq" className="text-gray-400 hover:text-white transition-colors">FAQ</Link></li>
             </ul>
           </div>
 
@@ -118,19 +85,11 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold text-sm mb-3">Support</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
-             {/* Quick Links or Support */}
-              <li>
-                <Link 
-                  to="/#how-it-works" 
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  How It Works
-                </Link>
-              </li>
-              <li><a href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Use</a></li>
-              <li><a href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+              <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/#how-it-works" className="text-gray-400 hover:text-white transition-colors">How It Works</Link></li>
+              <li><Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Use</Link></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 
@@ -138,9 +97,7 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold text-sm mb-3">Disclaimer</h3>
             <p className="text-xs text-gray-400 leading-relaxed">
-              TechMobile NG is an independent platform built to help users make safer phone 
-              purchases using aggregated data and community insights. 
-              While we strive for accuracy, users are advised to make final purchase decisions carefully.
+              TechMobile NG is an independent platform built to help users make safer phone purchases.
             </p>
           </div>
 
@@ -153,5 +110,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
