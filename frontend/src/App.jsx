@@ -18,10 +18,11 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import TermsOfUse from './pages/Termofuse';
 import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
+import Blog from './pages/Blog';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import UserDashboard from './pages/Dashboard';
-import FAQ from './pages/FAQ';
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function ScrollToHash() {
@@ -96,6 +97,7 @@ function AppContent() {
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfUse />} />
+        <Route path="/blog" element={<Blog />} /> 
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<FAQ />} />
 

@@ -147,9 +147,9 @@ const deviceInfo = {
                     </p>
 
                     {/* Status Badge */}
-                    <div className={`inline-flex items-center gap-1.5 mt-3 rounded-full px-3 py-1 ${isApproved ? 'bg-green-50 border border-green-200' : 'bg-yellow-50 border border-yellow-200'}`}>
-                      <ShieldIcon className={`w-4 h-4 ${isApproved ? 'text-green-600' : 'text-yellow-600'}`} />
-                      <span className={`text-xs font-semibold ${isApproved ? 'text-green-700' : 'text-yellow-700'}`}>
+                    <div className={`inline-flex items-center gap-1.5 mt-3 rounded-full px-3 py-1 ${isApproved ? 'bg-blue-50 border border-blue-200' : 'bg-yellow-50 border border-yellow-200'}`}>
+                      <ShieldIcon className={`w-4 h-4 ${isApproved ? 'text-blue-600' : 'text-yellow-600'}`} />
+                      <span className={`text-xs font-semibold ${isApproved ? 'text-blue-700' : 'text-yellow-700'}`}>
                         {isApproved ? 'NCC Approved' : 'Not Found in Database'}
                       </span>
                     </div>
@@ -162,8 +162,8 @@ const deviceInfo = {
                         { 
                           label: "Status", 
                           value: (
-                            <span className={`flex items-center gap-1.5 font-semibold text-sm ${isApproved ? 'text-green-600' : 'text-yellow-600'}`}>
-                              <span className={`w-2 h-2 rounded-full inline-block ${isApproved ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                            <span className={`flex items-center gap-1.5 font-semibold text-sm ${isApproved ? 'text-blue-600' : 'text-yellow-600'}`}>
+                              <span className={`w-2 h-2 rounded-full inline-block ${isApproved ? 'bg-blue-500' : 'bg-yellow-500'}`} />
                               {deviceInfo.status}
                             </span>
                           )
@@ -184,11 +184,11 @@ const deviceInfo = {
 
               {/* Approved Notice */}
               <div className={`mx-5 sm:mx-6 mb-5 sm:mb-6 rounded-xl p-4 flex items-start gap-3 ${isApproved ? 'bg-green-50 border border-green-200' : 'bg-yellow-50 border border-yellow-200'}`}>
-                <div className="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <ShieldIcon className="w-5 h-5 text-green-600" />
+                <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <ShieldIcon className="w-5 h-5 text-blue-600" />
                 </div>
                 <p className="text-sm leading-relaxed">
-                  {result.message || "This device status could not be verified from the NCC database."}
+                  {result.message || "This device status could not be verified."}
                 </p>
               </div>
             </div>
@@ -207,7 +207,7 @@ const deviceInfo = {
               {isApproved ? (
                 <button
                   onClick={handleSearchAgain}
-                  className="mt-5 inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-green-400 hover:text-green-600 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
+                  className="mt-5 inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-blue-400 hover:text-blue-600 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
                   <SearchIcon className="w-4 h-4" />
                   Search Another Device
                 </button>
