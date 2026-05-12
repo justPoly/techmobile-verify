@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { decode } from "html-entities";
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 const ShieldIcon = ({ className = "" }) => (
@@ -408,7 +409,7 @@ export default function Home() {
                   {post.image ? (
                     <img
                       src={post.image}
-                      alt={post.title}
+                      alt={decode(post.title)}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
@@ -418,7 +419,7 @@ export default function Home() {
 
                 {/* Title */}
                 <p className="text-xs font-medium text-gray-800 leading-snug group-hover:text-blue-600 transition-colors line-clamp-3">
-                  {post.title}
+                  {decode(post.title)}
                 </p>
 
                 {/* Date */}
