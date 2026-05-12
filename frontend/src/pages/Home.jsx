@@ -190,12 +190,44 @@ export default function Home() {
         .catch(err => console.error(err));
     }, []);
 
-  const blogPosts = [
-    { title: "How to Check if a Phone is NCC Approved in Nigeria", date: "May 18, 2024" },
-    { title: "Why Buying NCC Approved Phones Matters", date: "May 10, 2024" },
-    { title: "Understanding NCC Approval and IMEI Registration", date: "May 2, 2024" },
-    { title: "Top 5 Tips to Avoid Fake or Unapproved Phones", date: "Apr 26, 2024" },
-  ];
+
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [loadingBlog, setLoadingBlog] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch(
+          "https://techmobile.com.ng/wp-json/wp/v2/posts?_embed&per_page=4"
+        );
+        const data = await res.json();
+
+        const formatted = data.map((post) => ({
+          id: post.id,
+          title: post.title.rendered,
+          date: new Date(post.date).toLocaleDateString(),
+          image:
+            post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null,
+          link: post.link,
+        }));
+
+        setBlogPosts(formatted);
+      } catch (err) {
+        console.error("Failed to load blog posts:", err);
+      } finally {
+        setLoadingBlog(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  // const blogPosts = [
+  //   { title: "How to Check if a Phone is NCC Approved in Nigeria", date: "May 18, 2024" },
+  //   { title: "Why Buying NCC Approved Phones Matters", date: "May 10, 2024" },
+  //   { title: "Understanding NCC Approval and IMEI Registration", date: "May 2, 2024" },
+  //   { title: "Top 5 Tips to Avoid Fake or Unapproved Phones", date: "Apr 26, 2024" },
+  // ];
 
   // Shared container: full-width mobile, centred with padding on desktop
   const container = "w-full px-4 sm:px-6 lg:px-8 xl:px-12 max-w-screen-xl mx-auto";
@@ -345,30 +377,59 @@ export default function Home() {
       </div>
 
           {/* From the Blog */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-bold text-gray-900">From the Blog</h2>
-              <a href="#" className="text-blue-600 text-xs font-medium flex items-center
-                gap-1 hover:underline whitespace-nowrap">
-                View all <ArrowRightIcon className="w-3 h-3" />
-              </a>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {blogPosts.map((post) => (
-                <div key={post.title} className="cursor-pointer group">
-                  <div className="rounded-xl overflow-hidden bg-gray-200 mb-2 aspect-video
-                    flex items-center justify-center text-2xl">
-                    📰
-                  </div>
-                  <p className="text-xs font-medium text-gray-800 leading-snug
-                    group-hover:text-blue-600 transition-colors line-clamp-3">
-                    {post.title}
-                  </p>
-                  <p className="text-[10px] text-gray-400 mt-0.5">{post.date}</p>
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-base font-bold text-gray-900">From the Blog</h2>
+
+          <a
+            href="https://www.techmobile.com.ng"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 text-xs font-medium flex items-center gap-1 hover:underline whitespace-nowrap"
+          >
+            View all <ArrowRightIcon className="w-3 h-3" />
+          </a>
+        </div>
+
+        {loadingBlog ? (
+          <p className="text-xs text-gray-400">Loading posts...</p>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            {blogPosts.map((post) => (
+              <a
+                key={post.id}
+                href={post.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cursor-pointer group"
+              >
+                {/* Thumbnail */}
+                <div className="rounded-xl overflow-hidden bg-gray-200 mb-2 aspect-video flex items-center justify-center">
+                  {post.image ? (
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <span className="text-2xl">📰</span>
+                  )}
                 </div>
-              ))}
-            </div>
+
+                {/* Title */}
+                <p className="text-xs font-medium text-gray-800 leading-snug group-hover:text-blue-600 transition-colors line-clamp-3">
+                  {post.title}
+                </p>
+
+                {/* Date */}
+                <p className="text-[10px] text-gray-400 mt-0.5">
+                  {post.date}
+                </p>
+              </a>
+            ))}
           </div>
+        )}
+      </div>
 
           {/* Community Impact */}
           <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 flex flex-col justify-center">

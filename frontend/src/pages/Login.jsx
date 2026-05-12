@@ -148,7 +148,7 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await fetch("/api/login.php", {
+      const response = await fetch("/api/auth/login.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

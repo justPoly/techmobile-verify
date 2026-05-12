@@ -128,14 +128,39 @@ export default function SignUp() {
 
   const strength = getStrength(form.password);
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await new Promise(r => setTimeout(r, 1400));
+
+    try {
+        const res = await fetch("/api/auth/signup.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            full_name: form.fullName,
+            email: form.email,
+            password: form.password,
+        }),
+        });
+
+        const data = await res.json();
+        console.log(data);
+
+        if (data.status === "success") {
+        setSuccess(true);
+        setTimeout(() => navigate("/"), 2000);
+        } else {
+        alert(data.message);
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Network error");
+    }
+
     setLoading(false);
-    setSuccess(true);
-    setTimeout(() => navigate("/"), 2000);
-  };
+    };
 
   const inputBase = "w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all placeholder-gray-300 bg-white";
 
@@ -181,7 +206,7 @@ export default function SignUp() {
             {/* Heading */}
             <div className="text-center mb-7">
               <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
-              <p className="text-sm text-gray-500 mt-1">Join Techmobile NG to access all features</p>
+              <p className="text-sm text-gray-500 mt-1">Access all features</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
