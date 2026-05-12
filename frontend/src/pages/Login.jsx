@@ -136,15 +136,47 @@ export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setLoading(true);
-    await new Promise(r => setTimeout(r, 1200));
-    setLoading(false);
-    navigate("/");
+    setError("");
+
+    try {
+      const response = await fetch("/api/login.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        // Save login session
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token);
+
+        // Redirect to dashboard
+        navigate("/dashboard");
+      } else {
+        setError(data.message || "Invalid login credentials");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Server error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputBase = "w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all placeholder-gray-300 bg-white";
@@ -229,6 +261,12 @@ export default function Login() {
                   </Link>
                 </div>
               </div>
+
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3">
+                  {error}
+                </div>
+              )}
 
               {/* Submit */}
               <button

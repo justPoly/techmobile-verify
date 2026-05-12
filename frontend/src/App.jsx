@@ -20,7 +20,9 @@ import TermsOfUse from './pages/Termofuse';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import UserDashboard from './pages/Dashboard';
 import FAQ from './pages/FAQ';
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function ScrollToHash() {
   const location = useLocation();
@@ -47,45 +49,95 @@ function ScrollToHash() {
   return null;
 }
 
-function App() {
+
+function AppContent() {
+  const location = useLocation();
+
+  // Hide Navbar/Footer on admin pages
+      const hiddenLayoutRoutes = [
+        "/dashboard",
+        "/admin",
+      ];
+
+      const hideLayout = hiddenLayoutRoutes.some(route =>
+        location.pathname.startsWith(route)
+      );
+
   return (
-    <Router>
-      <ScrollToHash />   {/* ← Handles both same-page and cross-page scrolling */}
-      <Navbar />
+    <>
+      {!hideLayout && <Navbar />}
+
       <Routes>
-        <Route 
-          path="/" 
+        {/* Home */}
+        <Route
+          path="/"
           element={
             <>
-              
               <Hero />
               <Home />
             </>
-          } 
+          }
         />
 
+        {/* Verification */}
         <Route path="/loading" element={<LoadingState />} />
         <Route path="/result" element={<Result />} />
+
+        {/* Report Device */}
         <Route path="/report-device" element={<ReportDeviceStepOne />} />
         <Route path="/report-device/step2" element={<ReportDeviceStepTwo />} />
         <Route path="/report-device/step3" element={<ReportDeviceStepThree />} />
         <Route path="/report-success" element={<SubmitReport />} />
+
+        {/* Community */}
         <Route path="/community" element={<CommunityReports />} />
+
+        {/* Pages */}
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfUse />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<FAQ />} />
+
+        {/* Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
 
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        {/* User Dashboard */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="*" element={<div className="p-20 text-center text-2xl">Page Not Found</div>} />
+        {/* Admin */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+        {/* 404 */}
+        <Route
+          path="*"
+          element={
+            <div className="min-h-screen flex items-center justify-center text-2xl font-bold">
+              Page Not Found
+            </div>
+          }
+        />
       </Routes>
 
-      <Footer />
+      {!hideLayout && <Footer />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <ScrollToHash />
+      <AppContent />
     </Router>
   );
 }
