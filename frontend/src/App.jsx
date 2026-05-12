@@ -19,6 +19,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import TermsOfUse from './pages/Termofuse';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
+import SignUp from './pages/SignUp';
 import FAQ from './pages/FAQ';
 
 function ScrollToHash() {
@@ -76,6 +77,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
 
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} />
