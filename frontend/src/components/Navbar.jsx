@@ -47,7 +47,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <img 
-            src="/tm-logo.png"           // Make sure this file is in public/ folder
+            src="/tm-logo.png" // Make sure this file is in public/ folder
             alt="TechMobile NG Logo" 
             className="w-9 h-9 object-contain" 
           />

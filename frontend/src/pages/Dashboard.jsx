@@ -153,19 +153,24 @@ export default function Dashboard() {
         transition-transform duration-300
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0 lg:static lg:flex
-      `}>
+       `}>
+
         {/* Logo */}
         <div className="px-5 py-5 border-b border-gray-100">
-          <Link to="/" className="flex items-center gap-2.5">
-            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-md shadow-blue-200">
-              <ShieldCheckIcon className="w-5 h-5 text-white" />
-            </div>
+          <Link to="/" className="flex items-center gap-2">
+            <img 
+              src="/tm-logo.png" // Make sure this file is in public/ folder
+              alt="TechMobile NG Logo" 
+              className="w-9 h-9 object-contain" 
+            />
             <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-gray-900 text-base leading-tight">PhoneCheck</span>
-                <span className="bg-blue-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded leading-none">NG</span>
+              <div className="flex items-center gap-1">
+                <span className="font-bold text-blue-900 text-base leading-tight">Techmobile</span>
+                <span className="bg-blue-600 text-white text-[9px] font-bold px-1 py-0.5 rounded leading-none">
+                  NG
+                </span>
               </div>
-              <p className="text-[10px] text-gray-400 leading-none mt-0.5">Verify. Trust. Buy Smart.</p>
+              <p className="text-[9px] text-gray-400 leading-none">Verify. Trust. Buy Smart.</p>
             </div>
           </Link>
         </div>
@@ -338,7 +343,7 @@ export default function Dashboard() {
               <div className="space-y-3">
 
                 {/* Check a Phone */}
-                <Link to="/check-phone"
+                <Link to="/"
                   className="flex items-center justify-between gap-3 p-4 bg-blue-50 rounded-xl border border-blue-100 hover:bg-blue-100 hover:border-blue-200 transition-all group">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
