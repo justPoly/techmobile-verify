@@ -9,137 +9,122 @@ require_once 'config.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
         'status' => 'error',
-        'verdict' => 'error',
         'message' => 'Invalid request method'
     ]);
     exit;
 }
 
-// 🔹 Get input
+// ================= INPUT =================
 $data = json_decode(file_get_contents('php://input'), true);
-$modelInput = strtolower(trim($data['input'] ?? ''));
+$input = strtolower(trim($data['input'] ?? ''));
 
-if (empty($modelInput)) {
+if (!$input) {
     echo json_encode([
         'status' => 'error',
-        'verdict' => 'error',
-        'message' => 'Please enter a phone model name'
+        'message' => 'Enter a phone model'
     ]);
     exit;
 }
 
-// 🔹 Remove common brand names
+// ================= BRANDS =================
 $brands = [
-    'samsung', 'iphone', 'apple', 'infinix', 'tecno', 'itel',
-    'xiaomi', 'redmi', 'oppo', 'vivo', 'nokia', 'huawei'
+    'samsung','apple','iphone','infinix','tecno','itel',
+    'xiaomi','redmi','oppo','vivo','nokia','huawei'
 ];
 
-$modelOnly = $modelInput;
+$noiseWords = ['ultra','pro','plus','max','5g','new'];
 
-foreach ($brands as $brand) {
-    $modelOnly = str_replace($brand, '', $modelOnly);
+// ================= DETECT BRAND =================
+$detectedBrand = null;
+
+foreach ($brands as $b) {
+    if (str_contains($input, $b)) {
+        $detectedBrand = $b;
+        break;
+    }
 }
 
-$modelOnly = trim($modelOnly);
+// ================= CLEAN QUERY =================
+$clean = str_replace($brands, '', $input);
+$clean = str_replace($noiseWords, '', $clean);
+$clean = trim(preg_replace('/\s+/', ' ', $clean));
 
-// 🔹 Split into words
-$words = array_filter(explode(" ", $modelOnly));
+// fallback words
+$words = array_filter(explode(' ', $clean ?: $input));
 
-// 🔹 If no words left, fallback to original input
-if (empty($words)) {
-    $words = array_filter(explode(" ", $modelInput));
+// ================= 1. EXACT MATCH (BEST) =================
+$sql = "SELECT * FROM ncc_approved WHERE LOWER(models) = ? LIMIT 1";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $input);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    echo json_encode([
+        'status' => 'success',
+        'verdict' => 'genuine',
+        'message' => 'Exact match found ✅',
+        'data' => $result->fetch_assoc()
+    ]);
+    exit;
 }
 
-// =======================================================
-// 🔥 PRIMARY QUERY (STRICT MATCH: ALL WORDS MUST EXIST)
-// =======================================================
-
-$whereParts = [];
+// ================= 2. BUILD QUERY =================
+$where = [];
 $params = [];
 $types = "";
 
-foreach ($words as $word) {
-    $whereParts[] = "(LOWER(models) LIKE ? OR LOWER(equipment_name) LIKE ?)";
-    $params[] = "%$word%";
-    $params[] = "%$word%";
+// brand lock (VERY IMPORTANT)
+if ($detectedBrand) {
+    $where[] = "LOWER(manufacturer) = ?";
+    $params[] = $detectedBrand;
+    $types .= "s";
+}
+
+// word matching
+foreach ($words as $w) {
+    $where[] = "(LOWER(models) LIKE ? OR LOWER(equipment_name) LIKE ?)";
+    $params[] = "%$w%";
+    $params[] = "%$w%";
     $types .= "ss";
 }
 
-$whereClause = implode(" AND ", $whereParts);
+// strict mode first
+$whereClause = implode(" AND ", $where);
 
-$sql = "SELECT * FROM ncc_approved 
-        WHERE $whereClause
-        ORDER BY id DESC 
-        LIMIT 1";
-
+$sql = "SELECT * FROM ncc_approved WHERE $whereClause LIMIT 1";
 $stmt = $conn->prepare($sql);
-
-if (!$stmt) {
-    echo json_encode([
-        'status' => 'error',
-        'verdict' => 'error',
-        'message' => 'Database error (prepare failed)'
-    ]);
-    exit;
-}
-
 $stmt->bind_param($types, ...$params);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// =======================================================
-// 🔄 FALLBACK QUERY (LOOSE MATCH: ANY WORD MATCHES)
-// =======================================================
-
+// ================= 3. FALLBACK (LOOSE) =================
 if ($result->num_rows === 0) {
 
-    $whereParts = [];
-    $params = [];
-    $types = "";
+    $whereClause = implode(" OR ", $where);
 
-    foreach ($words as $word) {
-        $whereParts[] = "(LOWER(models) LIKE ? OR LOWER(equipment_name) LIKE ?)";
-        $params[] = "%$word%";
-        $params[] = "%$word%";
-        $types .= "ss";
-    }
-
-    $whereClause = implode(" OR ", $whereParts);
-
-    $sql = "SELECT * FROM ncc_approved 
-            WHERE $whereClause
-            ORDER BY id DESC 
-            LIMIT 1";
-
+    $sql = "SELECT * FROM ncc_approved WHERE $whereClause LIMIT 1";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param($types, ...$params);
     $stmt->execute();
     $result = $stmt->get_result();
 }
 
-// =======================================================
-// 🎯 RESPONSE
-// =======================================================
-
+// ================= RESPONSE =================
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
 
     echo json_encode([
         'status' => 'success',
         'verdict' => 'genuine',
-        'message' => 'This model is NCC Approved ✅',
-        'brand' => $row['manufacturer'],
-        'model' => $row['models'],
-        'equipment_name' => $row['equipment_name'],
-        'applicant' => $row['applicant'],
-        'last_updated' => $row['last_updated']
+        'message' => 'Device found in NCC database ✅',
+        'data' => $row
     ]);
-
 } else {
     echo json_encode([
         'status' => 'warning',
         'verdict' => 'suspicious',
-        'message' => 'This model was NOT found in the NCC Approved list. It might be a new release, grey import, or fake. Be careful!'
+        'message' => 'Device not found in NCC database'
     ]);
 }
 
