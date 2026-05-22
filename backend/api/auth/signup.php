@@ -1,23 +1,26 @@
 <?php
+
 ob_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: https://verify.techmobile.com.ng");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
-// Database connection
 require_once "../config.php";
+require_once "../vendor/autoload.php";
 
-// PHPMailer
-require_once "../vendor/PHPMailer/src/Exception.php";
-require_once "../vendor/PHPMailer/src/PHPMailer.php";
-require_once "../vendor/PHPMailer/src/SMTP.php";
-
+use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Only allow POST requests
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+// -------------------- ONLY POST --------------------
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
         "status" => "error",
@@ -26,14 +29,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Get JSON data
+// -------------------- GET INPUT --------------------
 $data = json_decode(file_get_contents("php://input"), true);
 
 $full_name = trim($data['full_name'] ?? '');
 $email = trim($data['email'] ?? '');
 $password = trim($data['password'] ?? '');
 
-// Validate fields
+// -------------------- VALIDATION --------------------
 if (!$full_name || !$email || !$password) {
     echo json_encode([
         "status" => "error",
@@ -42,7 +45,6 @@ if (!$full_name || !$email || !$password) {
     exit;
 }
 
-// Validate email
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     echo json_encode([
         "status" => "error",
@@ -51,7 +53,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-// Check if email already exists
+// -------------------- CHECK EXISTING USER --------------------
 $check = $conn->prepare("SELECT id FROM users WHERE email = ?");
 $check->bind_param("s", $email);
 $check->execute();
@@ -66,13 +68,10 @@ if ($result->num_rows > 0) {
     exit;
 }
 
-// Hash password
+// -------------------- CREATE USER --------------------
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-// Generate verification token
 $verificationToken = bin2hex(random_bytes(32));
 
-// Insert user
 $stmt = $conn->prepare("
     INSERT INTO users (
         full_name,
@@ -92,76 +91,37 @@ $stmt->bind_param(
     $verificationToken
 );
 
+// -------------------- AFTER SUCCESS INSERT --------------------
 if ($stmt->execute()) {
 
-    // Create verification link
-    $verificationLink =
-        "https://verify.techmobile.com.ng/api/auth/verify.php?token=" .
-        $verificationToken;
+    $verificationLink = "https://verify.techmobile.com.ng/api/auth/verify.php?token=$verificationToken";
 
-    // Send verification email
-    $mail = new PHPMailer(true);
-
+    // -------------------- SEND EMAIL --------------------
     try {
+        $mail = new PHPMailer(true);
 
         $mail->isSMTP();
-        $mail->SMTPDebug = 2;
-        $mail->Debugoutput = 'html';
-
-        $mail->Host = "verify.techmobile.com.ng";
+        $mail->Host = $_ENV['MAIL_HOST'];
         $mail->SMTPAuth = true;
-
-        $mail->Username = "support@verify.techmobile.com.ng";
-        $mail->Password = "justPoly@96";
-
+        $mail->Username = $_ENV['MAIL_USERNAME'];
+        $mail->Password = $_ENV['MAIL_PASSWORD'];
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Port = 465;
+        $mail->Port = $_ENV['MAIL_PORT'];
 
-        $mail->setFrom(
-            "support@verify.techmobile.com.ng",
-            "Techmobile Verify"
-        );
-
+        $mail->setFrom($_ENV['MAIL_USERNAME'], "Techmobile Verify");
         $mail->addAddress($email, $full_name);
 
         $mail->isHTML(true);
-
-        $mail->Subject = "Verify Your Email - Techmobile Verify";
+        $mail->Subject = "Verify Your Email";
 
         $mail->Body = "
-            <div style='font-family: Arial, sans-serif; padding:20px;'>
-
-                <h2 style='color:#2563eb;'>
-                    Welcome to Techmobile Verify
-                </h2>
-
-                <p>
-                    Thank you for creating an account.
-                </p>
-
-                <p>
-                    Please click the button below to verify your email address.
-                </p>
-
-                <a
-                    href='$verificationLink'
-                    style='
-                        display:inline-block;
-                        padding:12px 20px;
-                        background:#2563eb;
-                        color:white;
-                        text-decoration:none;
-                        border-radius:8px;
-                        font-weight:bold;
-                    '
-                >
-                    Verify Email
+            <div style='font-family: Arial; padding:20px'>
+                <h2>Welcome, $full_name</h2>
+                <p>Click below to verify your email:</p>
+                <a href='$verificationLink'
+                   style='display:inline-block;padding:10px 15px;background:#2563eb;color:#fff;text-decoration:none;border-radius:6px'>
+                   Verify Email
                 </a>
-
-                <p style='margin-top:20px; font-size:14px; color:#666;'>
-                    If you did not create this account, you can ignore this email.
-                </p>
-
             </div>
         ";
 
@@ -173,16 +133,14 @@ if ($stmt->execute()) {
         ]);
 
     } catch (Exception $e) {
-
         echo json_encode([
             "status" => "error",
-            "message" => "Email could not be sent.",
+            "message" => "Email failed",
             "error" => $mail->ErrorInfo
         ]);
     }
 
 } else {
-
     echo json_encode([
         "status" => "error",
         "message" => "Failed to create account"
@@ -190,4 +148,4 @@ if ($stmt->execute()) {
 }
 
 ob_end_flush();
-?>
+

@@ -19,3 +19,7 @@ Thumbs.db
 
 # XAMPP specific
 backend/api/config.php   # We'll handle this carefully
+
+# env
+.env
+vendor/

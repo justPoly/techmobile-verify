@@ -166,13 +166,55 @@ export default function SignUp() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#f0f4ff] flex items-center justify-center px-4">
-        <div className="bg-white rounded-2xl shadow-xl border border-blue-50 p-10 flex flex-col items-center text-center max-w-sm w-full">
-          <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-4 shadow-lg shadow-green-200">
-            <CheckCircleIcon className="w-8 h-8 text-white" />
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center px-4">
+
+        <div className="w-full max-w-md bg-white border border-gray-100 rounded-2xl shadow-lg p-8 text-center">
+
+          {/* Icon */}
+          <div className="w-14 h-14 mx-auto flex items-center justify-center rounded-full bg-blue-50 border border-blue-100 mb-5">
+            <MailIcon className="w-6 h-6 text-blue-600" />
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-1">Account Created!</h2>
-          <p className="text-sm text-gray-500">Welcome to Techmobile NG. Redirecting you now...</p>
+
+          {/* Title */}
+          <h2 className="text-xl font-semibold text-gray-900">
+            Check your email
+          </h2>
+
+          {/* Subtitle */}
+          <p className="text-sm text-gray-500 mt-2">
+            We’ve sent a verification link to your email address
+          </p>
+
+          {/* Email display */}
+          <div className="mt-5 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3">
+            <p className="text-sm font-medium text-gray-800 break-all">
+              {form.email}
+            </p>
+          </div>
+
+          {/* Instruction */}
+          <div className="mt-6 text-left bg-blue-50 border border-blue-100 rounded-xl p-4">
+            <p className="text-xs text-gray-700 leading-relaxed">
+              <span className="font-semibold text-blue-700">Next step:</span>
+              <br />
+              Click the verification link sent to your email to activate your account.
+              If you don’t see it, check your <span className="font-medium">Spam</span> or <span className="font-medium">Promotions</span> folder.
+            </p>
+          </div>
+
+          {/* Action button */}
+          <button
+            onClick={() => navigate("/login")}
+            className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm py-3 rounded-xl transition-all"
+          >
+            Go to Login
+          </button>
+
+          {/* Secondary note */}
+          <p className="text-xs text-gray-400 mt-4">
+            You can close this page after verifying your email
+          </p>
+
         </div>
       </div>
     );

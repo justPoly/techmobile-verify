@@ -3,46 +3,36 @@
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: https://verify.techmobile.com.ng");
 header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 require_once "../config.php";
+require_once "jwt.php";
 
-// Only POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-
     echo json_encode([
         "status" => "error",
         "message" => "Invalid request method"
     ]);
-
     exit;
 }
 
-// Get JSON input
+// ---------------- INPUT ----------------
 $data = json_decode(file_get_contents("php://input"), true);
 
 $email = trim($data['email'] ?? '');
 $password = trim($data['password'] ?? '');
 
-// Validate fields
-if (empty($email) || empty($password)) {
-
+if (!$email || !$password) {
     echo json_encode([
         "status" => "error",
         "message" => "Email and password are required"
     ]);
-
     exit;
 }
 
-// Check user
+// ---------------- FIND USER ----------------
 $stmt = $conn->prepare("
-    SELECT
-        id,
-        full_name,
-        email,
-        password,
-        is_verified
+    SELECT id, full_name, email, password, is_verified
     FROM users
     WHERE email = ?
     LIMIT 1
@@ -50,51 +40,43 @@ $stmt = $conn->prepare("
 
 $stmt->bind_param("s", $email);
 $stmt->execute();
-
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
-
     echo json_encode([
         "status" => "error",
         "message" => "Invalid email or password"
     ]);
-
     exit;
 }
 
 $user = $result->fetch_assoc();
 
-// Check email verification
+// ---------------- CHECK VERIFICATION ----------------
 if (!$user['is_verified']) {
-
     echo json_encode([
         "status" => "error",
         "message" => "Please verify your email before logging in."
     ]);
-
     exit;
 }
 
-// Verify password
+// ---------------- PASSWORD CHECK ----------------
 if (!password_verify($password, $user['password'])) {
-
     echo json_encode([
         "status" => "error",
         "message" => "Invalid email or password"
     ]);
-
     exit;
 }
 
-// Remove sensitive data
+// ---------------- GENERATE JWT ----------------
 unset($user['password']);
 unset($user['is_verified']);
 
-// Generate token
-$token = bin2hex(random_bytes(32));
+$token = generateJWT($user);
 
-// Success response
+// ---------------- RESPONSE ----------------
 echo json_encode([
     "status" => "success",
     "message" => "Login successful",
