@@ -6,21 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('ncc_approved', function (Blueprint $table) {
             $table->id();
+            $table->string('sn')->nullable();
+            $table->string('applicant');
+            $table->string('certificate_holder');
+            $table->string('equipment_name');
+            $table->string('models');
+            $table->string('manufacturer');
+            $table->timestamp('last_updated')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('ncc_approved');
     }
